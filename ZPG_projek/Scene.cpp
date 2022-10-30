@@ -15,7 +15,7 @@ void Scene::mouseCallbackWrapper(GLFWwindow* window, double xpos, double ypos) {
 }
 void Scene::drawFourSpheresScene(GLFWwindow* window, int width, int height)
 {
-    cout << "aa" << endl;
+    cout << "aaa" << endl;
     ShaderProgram* sm1_light = new ShaderProgram();
     sm1_light->addShader("lighting_first_task.vert");
     sm1_light->addShader("lighting_first_task.frag");
