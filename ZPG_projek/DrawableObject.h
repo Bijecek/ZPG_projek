@@ -20,11 +20,9 @@
 
 class DrawableObject : public CompleteTransformation
 {
-//	Model m;
+private:
 	Model lighting_model;
-//	ShaderProgram *sp;
-	ShaderProgram *lighting_sp;
-//	GLuint VAO;
+	ShaderProgram *lighting_sp;;
 	GLuint lighting_VAO;
 public:
 	CompleteTransformation* transformation = new CompleteTransformation();

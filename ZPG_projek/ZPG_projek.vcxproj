@@ -132,7 +132,6 @@
   <ItemGroup>
     <ClCompile Include="AmbientLight.cpp" />
     <ClCompile Include="Application.cpp" />
-    <ClCompile Include="Basic_test_scene.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CompleteTransformation.cpp" />
     <ClCompile Include="DiffuseLight.cpp" />
@@ -153,7 +152,6 @@
     <ClInclude Include="AmbientLight.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="base_rectangle.h" />
-    <ClInclude Include="Basic_test_scene.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CompleteTransformation.h" />
     <ClInclude Include="DiffuseLight.h" />

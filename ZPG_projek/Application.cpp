@@ -52,12 +52,18 @@ void Application::printVersionInfo()
 
 
 
-void Application::run()
+void Application::run(int choice)
 {
     Scene* scene = new Scene();
-//    scene->drawFourSpheresScene(window, this->width, this->height);
-    //scene->drawOneSphereLight(window, this->width, this->height);
-    scene->drawMultipleObjects(window, this->width, this->height);
+    if (choice == 1) {
+        scene->drawFourSpheresScene(window, this->width, this->height);
+    }
+    else if (choice == 2) {
+        scene->drawOneSphereLight(window, this->width, this->height);
+    }
+    else if (choice == 3) {
+        scene->drawMultipleObjects(window, this->width, this->height);
+    }
 }
 
 void Application::errorCallback(int error, const char* description)

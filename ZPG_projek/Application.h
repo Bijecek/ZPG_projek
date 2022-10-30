@@ -30,7 +30,7 @@ public:
 	//static Camera* camera_movement;
 	void createWindow(int width, int height, const char* title);
 	void printVersionInfo();
-	void run();
+	void run(int choice);
 	static void errorCallback(int error, const char* description);
 
 };

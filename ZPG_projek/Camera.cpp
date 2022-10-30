@@ -7,7 +7,6 @@ Camera::Camera(glm::vec3 position, float fov, float aspect, float near, float fa
 	this->near = near;
 	this->far = far;
 
-	//this->position = glm::vec3(0.0f, 0.5f, 3.0f);
     this->position = position;
     this->front = glm::vec3(0.0f, 0.0f, -1.0f);
 	this->direction = glm::normalize(position - glm::vec3(0));

@@ -15,7 +15,6 @@ void Scene::mouseCallbackWrapper(GLFWwindow* window, double xpos, double ypos) {
 }
 void Scene::drawFourSpheresScene(GLFWwindow* window, int width, int height)
 {
-    cout << "aaa" << endl;
     ShaderProgram* sm1_light = new ShaderProgram();
     sm1_light->addShader("lighting_first_task.vert");
     sm1_light->addShader("lighting_first_task.frag");
@@ -23,7 +22,7 @@ void Scene::drawFourSpheresScene(GLFWwindow* window, int width, int height)
     sm1_light->addDiffuseLight(glm::vec3(0, 0, 0));
 
 
-    Camera* camera = new Camera(glm::vec3(0.0f, 0.5f, 3.0f), 45.0f, width / (float)height, 0.1f, 100.0f);
+    Camera* camera = new Camera(glm::vec3(0, 0, 1), 45.0f, width / (float)height, 0.1f, 100.0f);
     camera->setMovement(width, height);
     Scene::camera_movement = camera;
     sm1_light->useCamera(camera);
@@ -41,17 +40,17 @@ void Scene::drawFourSpheresScene(GLFWwindow* window, int width, int height)
     DrawableObject* draw_Object2 = new DrawableObject(sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
     DrawableObject* draw_Object3 = new DrawableObject(sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
     DrawableObject* draw_Object4 = new DrawableObject(sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
-    draw_Object1->transformation->scale->scaling(glm::vec3(0.1f));
-    draw_Object1->transformation->translate->translation(glm::vec3(-0.3f, 0, 0));
+    draw_Object1->transformation->setScale()->scaling(glm::vec3(0.1f));
+    draw_Object1->transformation->setTranslate()->translation(glm::vec3(-0.3f, 0, 0));
 
-    draw_Object2->transformation->scale->scaling(glm::vec3(0.1f));
-    draw_Object2->transformation->translate->translation(glm::vec3(0.3f, 0, 0));
+    draw_Object2->transformation->setScale()->scaling(glm::vec3(0.1f));
+    draw_Object2->transformation->setTranslate()->translation(glm::vec3(0.3f, 0, 0));
 
-    draw_Object3->transformation->scale->scaling(glm::vec3(0.1f));
-    draw_Object3->transformation->translate->translation(glm::vec3(0, -0.3f, 0));
+    draw_Object3->transformation->setScale()->scaling(glm::vec3(0.1f));
+    draw_Object3->transformation->setTranslate()->translation(glm::vec3(0, -0.3f, 0));
 
-    draw_Object4->transformation->scale->scaling(glm::vec3(0.1f));
-    draw_Object4->transformation->translate->translation(glm::vec3(0, 0.3f, 0));
+    draw_Object4->transformation->setScale()->scaling(glm::vec3(0.1f));
+    draw_Object4->transformation->setTranslate()->translation(glm::vec3(0, 0.3f, 0));
 
 
     while (!glfwWindowShouldClose(window)) {
@@ -130,7 +129,7 @@ void Scene::drawOneSphereLight(GLFWwindow* window, int width, int height)
 
     DrawableObject* draw_Object1 = new DrawableObject(sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
   
-    draw_Object1->transformation->scale->scaling(glm::vec3(0.1f));
+    draw_Object1->transformation->setScale()->scaling(glm::vec3(0.1f));
     //draw_Object1->transformation->translate->translation(glm::vec3(-0.3f, 0, 0));
 
 
@@ -201,39 +200,39 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     srand((unsigned)time(NULL));
     //DrawableObject* draw_Object = new DrawableObject(sphere, sizeof(sphere) / sizeof(sphere[0]), sm, sm1_light, 0, 3, 6, 3);
     DrawableObject* draw_Object_rectangle = new DrawableObject(base_rectangle, sizeof(base_rectangle) / sizeof(base_rectangle[0]), sm_base_rectangle, 0, 4, 8, 4);
-    draw_Object_rectangle->transformation->translate->translation(glm::vec3(-3, -0.5f, 0));
-    draw_Object_rectangle->transformation->rotate->rotation(glm::radians(90.f),glm::vec3(1, 0, 0));
-    draw_Object_rectangle->transformation->scale->scaling(glm::vec3(50.f,10.f,10.f));
+    draw_Object_rectangle->transformation->setTranslate()->translation(glm::vec3(-3, -0.5f, 0));
+    draw_Object_rectangle->transformation->setRotate()->rotation(glm::radians(90.f), glm::vec3(1, 0, 0));
+    draw_Object_rectangle->transformation->setScale()->scaling(glm::vec3(50.f, 10.f, 10.f));
 
     vector<DrawableObject*> entities_cube;
     for (int i = 0; i < 20; i++) {
         DrawableObject* draw_Object1 = new DrawableObject(sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
-        draw_Object1->transformation->scale->scaling(glm::vec3(0.1f));
-        draw_Object1->transformation->translate->translation(glm::vec3(-5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX, 0, -5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX));
+        draw_Object1->transformation->setScale()->scaling(glm::vec3(0.1f));
+        draw_Object1->transformation->setTranslate()->translation(glm::vec3(-5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX, 0, -5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX));
         entities_cube.push_back(draw_Object1);
     }
 
     vector<DrawableObject*> entities_monkey;
     for (int i = 0; i < 20; i++) {
         DrawableObject* draw_Object1 = new DrawableObject(suziSmooth, sizeof(suziSmooth) / sizeof(suziSmooth[0]), sm2_light, 0, 3, 6, 3);
-        draw_Object1->transformation->scale->scaling(glm::vec3(0.1f));
-        draw_Object1->transformation->translate->translation(glm::vec3(-5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX, 0, -5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX));
+        draw_Object1->transformation->setScale()->scaling(glm::vec3(0.1f));
+        draw_Object1->transformation->setTranslate()->translation(glm::vec3(-5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX, 0, -5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX));
         entities_monkey.push_back(draw_Object1);
     }
 
     vector<DrawableObject*> entities_trees;
     for (int i = 0; i < 20; i++) {
         DrawableObject* draw_Object1 = new DrawableObject(tree, sizeof(tree) / sizeof(tree[0]), sm2_light, 0, 3, 6, 3);
-        draw_Object1->transformation->scale->scaling(glm::vec3(0.1f));
-        draw_Object1->transformation->translate->translation(glm::vec3(-5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX, 0, -5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX));
+        draw_Object1->transformation->setScale()->scaling(glm::vec3(0.1f));
+        draw_Object1->transformation->setTranslate()->translation(glm::vec3(-5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX, 0, -5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX));
         entities_trees.push_back(draw_Object1);
     }
 
     vector<DrawableObject*> entities_bushes;
     for (int i = 0; i < 40; i++) {
         DrawableObject* draw_Object1 = new DrawableObject(bushes, sizeof(bushes) / sizeof(bushes[0]), sm2_light, 0, 3, 6, 3);
-        draw_Object1->transformation->scale->scaling(glm::vec3(0.5f));
-        draw_Object1->transformation->translate->translation(glm::vec3(-5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX, 0, -5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX));
+        draw_Object1->transformation->setScale()->scaling(glm::vec3(0.5f));
+        draw_Object1->transformation->setTranslate()->translation(glm::vec3(-5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX, 0, -5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX));
         entities_bushes.push_back(draw_Object1);
     }
 

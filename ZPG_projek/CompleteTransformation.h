@@ -4,12 +4,15 @@
 #include "Scale.h"
 class CompleteTransformation
 {
-public:
+private:
 	Rotate* rotate = new Rotate();
 	Translate* translate = new Translate();
 	Scale* scale = new Scale();
 
 public:
+	Scale* setScale();
+	Rotate* setRotate();
+	Translate* setTranslate();
 	glm::mat4 getMatrix();
 
 };

@@ -12,6 +12,7 @@ using namespace std;
 
 class Shader
 {
+private:
 	const char* shader_in;
 	
 public:

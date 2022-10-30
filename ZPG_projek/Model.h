@@ -13,6 +13,7 @@ using namespace std;
 
 class Model
 {
+private:
 	GLuint VBO;
 	GLuint VAO;
 	vector<float> points_vector;

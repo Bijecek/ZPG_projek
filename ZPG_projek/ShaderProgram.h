@@ -38,5 +38,16 @@ public:
 	void addAmbientLight(float ambientStrength, glm::vec3 lightColor);
 	void addDiffuseLight(glm::vec3 lightPos);
 	void addSpecularLight(glm::vec3 viewPos);
+
+
+	void useShaderProgram(GLuint shader_program);
+	void setUniform_objectColor(glm::vec3 color);
+	void setUniform_ambientStrength(float ambientStrength);
+	void setUniform_lightColor(glm::vec3 lightColor);
+	void setUniform_lightPos(glm::vec3 lightPos);
+	void setUniform_viewPos(glm::vec3 viewPos);
+	void setUniform_modelMatrix(glm::mat4 modelMatrix);
+	void setUniform_viewMatrix(glm::mat4 viewMatrix);
+	void setUniform_projectionMatrix(glm::mat4 projectionMatrix);
 };
 

@@ -24,17 +24,6 @@ private:
 	float far;
 	float aspect;
 	const float radius = 10.0f;
-
-public:
-	glm::vec3 direction;
-	glm::vec3 front;
-	glm::vec3 position;
-	glm::vec3 up;
-	glm::vec3 camera_up;
-	glm::mat4 view;
-	glm::mat4 projection;
-
-private:
 	float floating_height = 1.0f;
 	bool firstMouse = true;
 	float lastX;
@@ -44,6 +33,13 @@ private:
 	float pitch = 0.0f;
 
 public:
+	glm::vec3 direction;
+	glm::vec3 front;
+	glm::vec3 position;
+	glm::vec3 up;
+	glm::vec3 camera_up;
+	glm::mat4 view;
+	glm::mat4 projection;
 	Camera(glm::vec3 position, float fov, float aspect, float near, float far);
 	glm::mat4 getView();
 	glm::mat4 getProjection();
