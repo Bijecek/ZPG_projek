@@ -64,6 +64,9 @@ void Application::run(int choice)
     else if (choice == 3) {
         scene->drawMultipleObjects(window, this->width, this->height);
     }
+    else {
+
+    }
 }
 
 void Application::errorCallback(int error, const char* description)
