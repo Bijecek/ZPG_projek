@@ -34,7 +34,6 @@ void Scene::drawFourSpheresScene(GLFWwindow* window, int width, int height)
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     float i = 0;
-    //DrawableObject* draw_Object = new DrawableObject(sphere, sizeof(sphere) / sizeof(sphere[0]), sm, sm1_light, 0, 3, 6, 3);
 
     DrawableObject* draw_Object1 = new DrawableObject(sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
     DrawableObject* draw_Object2 = new DrawableObject(sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
@@ -61,35 +60,14 @@ void Scene::drawFourSpheresScene(GLFWwindow* window, int width, int height)
         // clear color and depth buffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        //Tohle pošli do modelu
-        // Abstraktni trida Model
-        // 
-        // 
-        //Funguje
-        //    DrawableObject* draw_Object = new DrawableObject(points, size, sm, 0, 4, 8*sizeof(float));
-             //DrawableObject* draw_Object = new DrawableObject(cube_data, size_cube, sm, 0, 3,7);
-
-
-
-
-//            draw_Object->transformation->rotate->rotation(20.f+i, glm::vec3(0.2f,0,0.5f));
-
- //           draw_Object->draw(window, "GL_TRIANGLES_QUADS");
-        //draw_Object->draw(window, "GL_MONKEY");
-
-
-        //            draw_Object1->transformation->translate->translation(glm::vec3(1.0f, 2.0f, 0));
-        //            draw_Object1->transformation->rotate->rotation(20.f + i, glm::vec3(0.2f, 0, 0.5f));
+        
         draw_Object1->draw(window, "GL_TRIANGLES_QUADS");
         draw_Object2->draw(window, "GL_TRIANGLES_QUADS");
         draw_Object3->draw(window, "GL_TRIANGLES_QUADS");
         draw_Object4->draw(window, "GL_TRIANGLES_QUADS");
 
-        //            std::cin.ignore();
-
-                // update other events like input handling
+     
         glfwPollEvents();
-        // put the stuff we’ve been drawing onto the display
         glfwSwapBuffers(window);
     }
     glfwDestroyWindow(window);
@@ -130,7 +108,6 @@ void Scene::drawOneSphereLight(GLFWwindow* window, int width, int height)
     DrawableObject* draw_Object1 = new DrawableObject(sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
   
     draw_Object1->transformation->setScale()->scaling(glm::vec3(0.1f));
-    //draw_Object1->transformation->translate->translation(glm::vec3(-0.3f, 0, 0));
 
 
     while (!glfwWindowShouldClose(window)) {
@@ -139,15 +116,12 @@ void Scene::drawOneSphereLight(GLFWwindow* window, int width, int height)
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
 
-        // clear color and depth buffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         
 
         draw_Object1->draw(window, "GL_TRIANGLES_QUADS");
-                // update other events like input handling
         glfwPollEvents();
-        // put the stuff we’ve been drawing onto the display
         glfwSwapBuffers(window);
     }
     glfwDestroyWindow(window);
@@ -178,7 +152,6 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     sm2_light->addAmbientLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f));
     sm2_light->addDiffuseLight(glm::vec3(-3, 0, 0));
 
-    //0.0f, 0.5f, 3.0f
     Camera* camera = new Camera(glm::vec3(0, 0, 1), 45.0f, width / (float)height, 0.1f, 100.0f);
     camera->setMovement(width, height);
     Scene::camera_movement = camera;
@@ -198,7 +171,6 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
 
     float i = 0;
     srand((unsigned)time(NULL));
-    //DrawableObject* draw_Object = new DrawableObject(sphere, sizeof(sphere) / sizeof(sphere[0]), sm, sm1_light, 0, 3, 6, 3);
     DrawableObject* draw_Object_rectangle = new DrawableObject(base_rectangle, sizeof(base_rectangle) / sizeof(base_rectangle[0]), sm_base_rectangle, 0, 4, 8, 4);
     draw_Object_rectangle->transformation->setTranslate()->translation(glm::vec3(-3, -0.5f, 0));
     draw_Object_rectangle->transformation->setRotate()->rotation(glm::radians(90.f), glm::vec3(1, 0, 0));
@@ -242,28 +214,9 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
         camera->handleKeys(window);
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
-        // clear color and depth buffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        //Tohle pošli do modelu
-        // Abstraktni trida Model
-        // 
-        // 
-        //Funguje
-        //    DrawableObject* draw_Object = new DrawableObject(points, size, sm, 0, 4, 8*sizeof(float));
-             //DrawableObject* draw_Object = new DrawableObject(cube_data, size_cube, sm, 0, 3,7);
-
-
-
-
-//            draw_Object->transformation->rotate->rotation(20.f+i, glm::vec3(0.2f,0,0.5f));
-
- //           draw_Object->draw(window, "GL_TRIANGLES_QUADS");
-        //draw_Object->draw(window, "GL_MONKEY");
-
-
-        //            draw_Object1->transformation->translate->translation(glm::vec3(1.0f, 2.0f, 0));
-        //            draw_Object1->transformation->rotate->rotation(20.f + i, glm::vec3(0.2f, 0, 0.5f));
+       
         draw_Object_rectangle->draw(window, "GL_QUADS");
         for (DrawableObject* object : entities_cube) {
             object->draw(window, "GL_TRIANGLES_QUADS");
@@ -278,11 +231,7 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
             object3->draw(window, "GL_BUSH");
         }
 
-        //            std::cin.ignore();
-
-                // update other events like input handling
         glfwPollEvents();
-        // put the stuff we’ve been drawing onto the display
         glfwSwapBuffers(window);
     }
     glfwDestroyWindow(window);
