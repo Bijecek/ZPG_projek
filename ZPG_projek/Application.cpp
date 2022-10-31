@@ -5,6 +5,7 @@
 Application::Application()
 {
 	createWindow(1280, 720, "ZPG");
+    //createWindow(2000, 720, "ZPG");
 }
 
 

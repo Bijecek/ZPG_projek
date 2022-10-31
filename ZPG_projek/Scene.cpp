@@ -82,12 +82,12 @@ void Scene::drawOneSphereLight(GLFWwindow* window, int width, int height)
 
     ShaderProgram* sm1_light = new ShaderProgram();
 //correct output of 2nd task
-//    sm1_light->addShader("lighting_second_task_right.vert");
-//    sm1_light->addShader("lighting_second_task_right.frag");
+    sm1_light->addShader("lighting_second_task_right.vert");
+    sm1_light->addShader("lighting_second_task_right.frag");
 
 //wrong output of 2nd task
-    sm1_light->addShader("lighting_second_task_wrong.vert");
-    sm1_light->addShader("lighting_second_task_wrong.frag");
+//    sm1_light->addShader("lighting_second_task_wrong.vert");
+//    sm1_light->addShader("lighting_second_task_wrong.frag");
     sm1_light->addAmbientLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f));
     sm1_light->addDiffuseLight(glm::vec3(0, 0, -1));
 
