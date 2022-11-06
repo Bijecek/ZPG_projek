@@ -7,16 +7,19 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <vector>
+#include <iostream>
 #include <glm/vec3.hpp> // glm::vec3
 #include <glm/vec4.hpp> // glm::vec4
 #include <glm/mat4x4.hpp> // glm::mat4
 #include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
 #include <glm/gtc/type_ptr.hpp> // glm::value_ptr
 #include <cmath>
-
+#include "Observer.h"
+//include Subject
+//class Observer;
 using namespace std;
 
-class Camera
+class Camera //dedi ze subjectu)
 {
 private:
 	float fov;
@@ -44,9 +47,14 @@ public:
 	glm::mat4 getView();
 	glm::mat4 getProjection();
 
+
 	void setMovement(int width, int height);
 	void handleMouse(GLFWwindow* window, double xpos, double ypos);
 	void handleKeys(GLFWwindow* window);
 	glm::vec3 getPosition();
+
+	vector<Observer*> obs;
+	void update();
+	void attachObs(Observer* obs);
 };
 

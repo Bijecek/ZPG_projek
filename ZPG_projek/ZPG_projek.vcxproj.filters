@@ -66,6 +66,9 @@
     <ClCompile Include="SpecularLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Observer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -125,6 +128,9 @@
     <ClInclude Include="base_rectangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Observer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="pyramid.vert">
@@ -161,6 +167,12 @@
       <Filter>Source Files</Filter>
     </None>
     <None Include="lighting_third_task_blue.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="direct_light.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="direct_light.vert">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>

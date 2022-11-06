@@ -4,10 +4,11 @@ DrawableObject::DrawableObject(float *points, int size, ShaderProgram *sp_light,
     this->lighting_model = temp;
     this->lighting_VAO = lighting_model.setVBOVAO(index, size_index, count, color_count);
     this->lighting_sp = sp_light;
-    this->lighting_sp->createShaderProgram();
+    //this->lighting_sp->createShaderProgram();
+
 }
 
-void DrawableObject::draw(GLFWwindow *window,string draw_something) {
+void DrawableObject::draw(GLFWwindow *window,int size) {
     this->lighting_sp->useShaderProgram(this->lighting_sp->shaderProgram);
     
     this->lighting_sp->setUniform_objectColor(glm::vec3(1, 1, 1));
@@ -24,6 +25,7 @@ void DrawableObject::draw(GLFWwindow *window,string draw_something) {
     this->lighting_sp->setUniform_modelMatrix(this->transformation->getMatrix());
 
 
+
     this->lighting_sp->setUniform_viewMatrix(this->lighting_sp->camera->getView());
 
 
@@ -34,22 +36,13 @@ void DrawableObject::draw(GLFWwindow *window,string draw_something) {
     glBindVertexArray(this->lighting_VAO);
 
     
-    if (draw_something == "GL_TRIANGLES_QUADS") {
-        glDrawArrays(GL_TRIANGLES, 0, 2880);
+    
+    if (size % 6 == 0) {
+        glDrawArrays(GL_TRIANGLES, 0, size / 6);
+
     }
-    else if (draw_something == "GL_MONKEY") {
-        glDrawArrays(GL_TRIANGLES,0, 2904);
+    else if (size % 8 == 0) {
+        glDrawArrays(GL_QUADS, 0, size / 8);
     }
-    else if (draw_something == "GL_QUADS") {
-        glDrawArrays(GL_QUADS, 0, 4);
-    }
-    else if (draw_something == "GL_TREE") {
-        glDrawArrays(GL_TRIANGLES, 0, 92814);
-    }
-    else if (draw_something == "GL_BUSH") {
-        glDrawArrays(GL_TRIANGLES, 0, 8730);
-    }
-    else {
-        glDrawArrays(GL_TRIANGLES, 0, 3 * 12);
-    }
+   
 }

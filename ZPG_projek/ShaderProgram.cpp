@@ -3,6 +3,14 @@
 ShaderProgram::ShaderProgram() {
 	this->shader_Array = vector<Shader*>(0);
 	this->shader_code = {};
+	//camera->attachObs(this);
+};
+//pridano
+ShaderProgram::ShaderProgram(Camera *camera) {
+	this->shader_Array = vector<Shader*>(0);
+	this->shader_code = {};
+	//camera->attachObs(this);
+	this->camera = camera;
 };
 
 void ShaderProgram::addShader(std::string path) {
@@ -23,6 +31,8 @@ void ShaderProgram::addShader(std::string path) {
 }
 
 void ShaderProgram::attachShaders() {
+	cout << "Velikost pole : "<< endl;
+	cout << shader_Array.size() << endl;
 	for (int i = 0; i < shader_Array.size(); i++) {
 		if (shader_Array[i]->isVertex()) {
 			glAttachShader(shaderProgram, shader_Array[i]->createVertex());
@@ -61,6 +71,7 @@ void ShaderProgram::createShaderProgram()
 void ShaderProgram::useCamera(Camera* camera)
 {
 	this->camera = camera;
+	//this->camera->attachObs(this);
 }
 
 void ShaderProgram::addAmbientLight(float ambientStrength, glm::vec3 lightColor) {
@@ -138,3 +149,17 @@ void ShaderProgram::setUniform_projectionMatrix(glm::mat4 projectionMatrix)
 	glUniformMatrix4fv(p_matrix_id_light, 1, GL_FALSE, &projectionMatrix[0][0]);
 
 }
+
+void ShaderProgram::setPointLight(float ambientStrength, glm::vec3 lightColor, glm::vec3 lightPos, glm::vec3 viewPos)
+{
+
+}
+
+/*
+void ShaderProgram::notify()
+{
+	//cout << "Notified in sp" << endl;
+	GLint v_matrix_id_light = glGetUniformLocation(this->shaderProgram, "viewMatrix");
+	glUniformMatrix4fv(v_matrix_id_light, 1, GL_FALSE, &this->camera->getView()[0][0]);
+}
+*/

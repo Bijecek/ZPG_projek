@@ -33,7 +33,38 @@ void Camera::setMovement(int width, int height) {
     this->yaw = -90.0f;
 }
 void Camera::handleMouse(GLFWwindow* window, double xpos, double ypos) {
-     if (firstMouse)
+    /*
+            if (firstMouse)
+            {
+                lastX = xpos;
+                lastY = ypos;
+
+                firstMouse = false;
+            }
+
+            float xoffset = float(xpos - 1024 / 2);
+            float yoffset = float(768 / 2 - ypos);
+            //lastX = xpos;
+            //lastY = ypos;
+            xoffset *= sensitivity;
+            yoffset *= sensitivity;
+            yaw += xoffset;
+            pitch += yoffset;
+
+            if (pitch > 89.0f)
+                pitch = 89.0f;
+            if (pitch < -89.0f)
+                pitch = -89.0f;
+
+            glm::vec3 direction;
+            direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+            direction.y = sin(glm::radians(pitch));
+            direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+            front = glm::normalize(direction);
+            glfwSetCursorPos(window, 1024 / 2, 768 / 2);
+            //update();
+            */
+    if (firstMouse)
     {
         lastX = xpos;
         lastY = ypos;
@@ -41,8 +72,8 @@ void Camera::handleMouse(GLFWwindow* window, double xpos, double ypos) {
         firstMouse = false;
     }
 
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos;
+    float xoffset = float(xpos - lastX);
+    float yoffset = float(lastY - ypos);
     lastX = xpos;
     lastY = ypos;
     xoffset *= sensitivity;
@@ -60,7 +91,6 @@ void Camera::handleMouse(GLFWwindow* window, double xpos, double ypos) {
     direction.y = sin(glm::radians(pitch));
     direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
     front = glm::normalize(direction);
-
 }
 void Camera::handleKeys(GLFWwindow* window) {
     const float cameraSpeed = 0.02f;
@@ -72,8 +102,20 @@ void Camera::handleKeys(GLFWwindow* window) {
         position -= glm::normalize(glm::cross(front, camera_up)) * cameraSpeed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         position += glm::normalize(glm::cross(front, camera_up)) * cameraSpeed;
+    //update();
 }
 
 glm::vec3 Camera::getPosition() {
     return this->position;
+}
+void Camera::update() {
+    printf("Velikost obs\n");
+    printf("%d", this->obs.size());
+    for (Observer *o : obs) {  
+        o->notify();
+    }
+    //this->obs[0]->notify();
+}
+void Camera::attachObs(Observer* obs) {
+    this->obs.push_back(obs);
 }

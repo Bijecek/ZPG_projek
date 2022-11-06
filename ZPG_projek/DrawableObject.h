@@ -22,13 +22,13 @@ class DrawableObject : public CompleteTransformation
 {
 private:
 	Model lighting_model;
-	ShaderProgram *lighting_sp;;
+	ShaderProgram *lighting_sp;
 	GLuint lighting_VAO;
 public:
 	CompleteTransformation* transformation = new CompleteTransformation();
 
 public:
 	DrawableObject(float *points, int size, ShaderProgram* sp_light, int index, int size_index, int count, int color_count);
-	void draw(GLFWwindow* window, string draw_something);
+	void draw(GLFWwindow* window, int size);
 };
 

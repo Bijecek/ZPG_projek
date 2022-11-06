@@ -15,10 +15,11 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include "Observer.h"
 
 using namespace std;
 
-class ShaderProgram
+class ShaderProgram// : public Observer
 {
 public:
 	vector<Shader*> shader_Array;
@@ -30,6 +31,7 @@ public:
 public:
 	Camera* camera;
 	ShaderProgram();
+	ShaderProgram(Camera* camera);
 	void addShader(std::string path);
 	void createShaderProgram();
 	void checkStatus();
@@ -49,5 +51,10 @@ public:
 	void setUniform_modelMatrix(glm::mat4 modelMatrix);
 	void setUniform_viewMatrix(glm::mat4 viewMatrix);
 	void setUniform_projectionMatrix(glm::mat4 projectionMatrix);
+
+	void setPointLight(float ambientStrength, glm::vec3 lightColor, glm::vec3 lightPos, glm::vec3 viewPos);
+
+	// Inherited via Observer
+	//virtual void notify() override;
 };
 

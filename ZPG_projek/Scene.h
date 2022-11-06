@@ -20,6 +20,7 @@
 #include <glm/gtc/type_ptr.hpp> // glm::value_ptr
 //#include "sphere.h"
 #include "Scenes.h"
+#include "Observer.h"
 
 using namespace std;
 
