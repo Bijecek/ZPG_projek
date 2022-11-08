@@ -74,19 +74,19 @@ void ShaderProgram::useCamera(Camera* camera)
 	//this->camera->attachObs(this);
 }
 
-void ShaderProgram::addAmbientLight(float ambientStrength, glm::vec3 lightColor) {
-	this->amb_light = new AmbientLight(ambientStrength, lightColor);
-}
+//void ShaderProgram::addAmbientLight(float ambientStrength, glm::vec3 lightColor) {
+//	this->amb_light = new AmbientLight(ambientStrength, lightColor);
+//}
 
-void ShaderProgram::addDiffuseLight(glm::vec3 lightPos)
-{
-	this->dif_light = new DiffuseLight(lightPos);
-}
+//void ShaderProgram::addDiffuseLight(glm::vec3 lightPos)
+//{
+//	this->dif_light = new DiffuseLight(lightPos);
+//}
 
-void ShaderProgram::addSpecularLight(glm::vec3 viewPos)
-{
-	this->spe_light = new SpecularLight(viewPos);
-}
+//void ShaderProgram::addSpecularLight(glm::vec3 viewPos)
+//{
+//	this->spe_light = new SpecularLight(viewPos);
+//}
 
 void ShaderProgram::useShaderProgram(GLuint shader_program)
 {
@@ -114,8 +114,8 @@ void ShaderProgram::setUniform_lightColor(glm::vec3 lightColor)
 
 void ShaderProgram::setUniform_lightPos(glm::vec3 lightPos)
 {
-	GLint p_matrix_light = glGetUniformLocation(this->shaderProgram, "lightPos");
-	glUniform3fv(p_matrix_light, 1, glm::value_ptr(lightPos));
+	//GLint p_matrix_light = glGetUniformLocation(this->shaderProgram, "lightPos");
+	//glUniform3fv(p_matrix_light, 1, glm::value_ptr(lightPos));
 
 }
 
@@ -150,9 +150,44 @@ void ShaderProgram::setUniform_projectionMatrix(glm::mat4 projectionMatrix)
 
 }
 
-void ShaderProgram::setPointLight(float ambientStrength, glm::vec3 lightColor, glm::vec3 lightPos, glm::vec3 viewPos)
+void ShaderProgram::addPointLight(float ambientStrength, glm::vec3 lightColor, glm::vec3 lightPos, glm::vec3 viewPos)
 {
+	this->point_light = new PointLight(ambientStrength, lightColor, lightPos, viewPos);
+	lightPositions.push_back(lightPos);
+}
 
+void ShaderProgram::useAvailableLights(float value)
+{
+	this->useShaderProgram(this->shaderProgram);
+	GLint p_matrix_light = glGetUniformLocation(this->shaderProgram, "light_Pos");
+	glUniform3fv(p_matrix_light,lightPositions.size(), reinterpret_cast<GLfloat*>(lightPositions.data()));
+
+	if (this->directional_light != NULL) {
+		GLint direct_light = glGetUniformLocation(this->shaderProgram, "direct_Light_Direct");
+		glUniform3fv(direct_light, 1, glm::value_ptr(this->directional_light->getLight_Direction()));
+	}
+	
+	GLint p_matrix_light12 = glGetUniformLocation(this->shaderProgram, "lightPosition_var");
+	glUniform3fv(p_matrix_light12, 1, glm::value_ptr(this->camera->getPosition()));
+
+	GLint p_matrix_light13 = glGetUniformLocation(this->shaderProgram, "lightDirection_var");
+	glUniform3fv(p_matrix_light13, 1, glm::value_ptr(this->camera->front));
+	
+	GLint p_matrix_light14 = glGetUniformLocation(this->shaderProgram, "cutOff_var");
+	glUniform1f(p_matrix_light14, glm::cos(glm::radians(12.5f)));
+
+	GLint p_matrix_light15 = glGetUniformLocation(this->shaderProgram, "outerCut_var");
+	glUniform1f(p_matrix_light15, glm::cos(glm::radians(15.0f)));
+
+	if (value >= 0) {
+		GLint p_matrix_light16 = glGetUniformLocation(this->shaderProgram, "flashlight_Strength");
+		glUniform1f(p_matrix_light16, value);
+	}
+}
+
+void ShaderProgram::addDirectionalLight(glm::vec3 direction)
+{
+	this->directional_light = new DirectionalLight(direction);
 }
 
 /*

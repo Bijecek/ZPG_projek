@@ -1,8 +1,5 @@
 #pragma once
 #include "Shader.h"
-#include "AmbientLight.h"
-#include "DiffuseLight.h"
-#include "SpecularLight.h"
 #include <GL/glew.h>
 //Include GLFW
 #include <glfw3.h> 
@@ -16,6 +13,8 @@
 #include <string>
 #include <sstream>
 #include "Observer.h"
+#include "PointLight.h"
+#include "DirectionalLight.h"
 
 using namespace std;
 
@@ -25,9 +24,13 @@ public:
 	vector<Shader*> shader_Array;
 	GLuint shaderProgram;
 	vector<string> shader_code;
-	AmbientLight* amb_light;
-	DiffuseLight* dif_light;
-	SpecularLight* spe_light;
+	
+	PointLight* point_light;
+	DirectionalLight* directional_light;
+
+
+	vector<glm::vec3> lightPositions;
+
 public:
 	Camera* camera;
 	ShaderProgram();
@@ -37,9 +40,7 @@ public:
 	void checkStatus();
 	void attachShaders();
 	void useCamera(Camera* camera);
-	void addAmbientLight(float ambientStrength, glm::vec3 lightColor);
-	void addDiffuseLight(glm::vec3 lightPos);
-	void addSpecularLight(glm::vec3 viewPos);
+	
 
 
 	void useShaderProgram(GLuint shader_program);
@@ -52,8 +53,10 @@ public:
 	void setUniform_viewMatrix(glm::mat4 viewMatrix);
 	void setUniform_projectionMatrix(glm::mat4 projectionMatrix);
 
-	void setPointLight(float ambientStrength, glm::vec3 lightColor, glm::vec3 lightPos, glm::vec3 viewPos);
+	void addPointLight(float ambientStrength, glm::vec3 lightColor, glm::vec3 lightPos, glm::vec3 viewPos);
+	void useAvailableLights(float value);
 
+	void addDirectionalLight(glm::vec3 direction);
 	// Inherited via Observer
 	//virtual void notify() override;
 };

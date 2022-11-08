@@ -24,10 +24,10 @@ void Scene::drawFourSpheresScene(GLFWwindow* window, int width, int height)
     ShaderProgram* sm1_light = new ShaderProgram();
     sm1_light->addShader("lighting_first_task.vert");
     sm1_light->addShader("lighting_first_task.frag");
-    sm1_light->addAmbientLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f));
-    sm1_light->addDiffuseLight(glm::vec3(0, 0, 0));
+    //sm1_light->addAmbientLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f));
+    //sm1_light->addDiffuseLight(glm::vec3(0, 0, 0));
     sm1_light->useCamera(camera);
-    sm1_light->addSpecularLight(camera->getPosition());
+    //sm1_light->addSpecularLight(camera->getPosition());
     sm1_light->createShaderProgram();
 
     glfwSetCursorPosCallback(window, mouseCallbackWrapper);
@@ -93,9 +93,9 @@ void Scene::drawOneSphereLight(GLFWwindow* window, int width, int height)
 //wrong output of 2nd task
 //    sm1_light->addShader("lighting_second_task_wrong.vert");
 //    sm1_light->addShader("lighting_second_task_wrong.frag");
-    sm1_light->addAmbientLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f));
-    sm1_light->addDiffuseLight(glm::vec3(0, 0, -1));
-    sm1_light->addSpecularLight(camera->getPosition());
+    //sm1_light->addAmbientLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f));
+    //sm1_light->addDiffuseLight(glm::vec3(0, 0, -1));
+    //sm1_light->addSpecularLight(camera->getPosition());
     sm1_light->useCamera(camera);
     sm1_light->createShaderProgram();
 
@@ -140,11 +140,13 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     camera->setMovement(width, height);
     Scene::camera_movement = camera;
 
+    
     ShaderProgram* sm_base_rectangle = new ShaderProgram();
     sm_base_rectangle->addShader("pyramid.vert");
     sm_base_rectangle->addShader("pyramid.frag");
-    sm_base_rectangle->addAmbientLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f));
-    sm_base_rectangle->addDiffuseLight(glm::vec3(-3, 0, 0));
+    //sm_base_rectangle->addAmbientLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f));
+    //sm_base_rectangle->addDiffuseLight(glm::vec3(-3, 0, 0));
+    sm_base_rectangle->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-3, 0, 0), camera->getPosition());
     sm_base_rectangle->createShaderProgram();
     
     /*
@@ -158,46 +160,40 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     ShaderProgram* sm1_light = new ShaderProgram();
     sm1_light->addShader("direct_light.vert");
     sm1_light->addShader("direct_light.frag");
-    sm1_light->addAmbientLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f));
-    sm1_light->addDiffuseLight(glm::vec3(-3, 3, 3));
+    //sm1_light->addAmbientLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f));
+    //sm1_light->addDiffuseLight(glm::vec3(-3, 3, 3));
+    sm1_light->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(2, 0, 0), camera->getPosition());
+    sm1_light->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(5,0,0), camera->getPosition());
+    sm1_light->addDirectionalLight(glm::vec3(2, 5, 0));
     sm1_light->createShaderProgram();
-
+    //sm1_light->useAllPointLights();
     
 
-
+    
     ShaderProgram* sm2_light = new ShaderProgram();
     sm2_light->addShader("lighting_third_task_blue.vert");
     sm2_light->addShader("lighting_third_task_blue.frag");
-    sm2_light->addAmbientLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f));
-    sm2_light->addDiffuseLight(glm::vec3(-3, 0, 0));
+
+    sm2_light->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-3, 0, 0), camera->getPosition());
     sm2_light->createShaderProgram();
    
-    //sm_base_rectangle->useCamera(camera);
-    sm_base_rectangle->addSpecularLight(camera->getPosition());
-
-    
-    //sm1_light->useCamera(camera);
-    sm1_light->addSpecularLight(camera->getPosition());
-
-    //sm2_light->useCamera(camera);
-    sm2_light->addSpecularLight(camera->getPosition());
-
     sm_base_rectangle->useCamera(camera);
-    sm1_light->useCamera(camera);
+ 
     sm2_light->useCamera(camera);
     
     
-
+    sm1_light->useCamera(camera);
 
     //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     float i = 0;
     srand((unsigned)time(NULL));
+    
     DrawableObject* draw_Object_rectangle = new DrawableObject(base_rectangle, sizeof(base_rectangle) / sizeof(base_rectangle[0]), sm_base_rectangle, 0, 4, 8, 4);
     draw_Object_rectangle->transformation->setTranslate()->translation(glm::vec3(-3, -0.5f, 0));
     draw_Object_rectangle->transformation->setRotate()->rotation(glm::radians(90.f), glm::vec3(1, 0, 0));
     draw_Object_rectangle->transformation->setScale()->scaling(glm::vec3(50.f, 10.f, 10.f));
-
+    
     
     vector<DrawableObject*> entities_cube;
     for (int i = 0; i < 20; i++) {
@@ -206,7 +202,6 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
         draw_Object1->transformation->setTranslate()->translation(glm::vec3(-5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX, 0, -5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX));
         entities_cube.push_back(draw_Object1);
     }
-    
     
     vector<DrawableObject*> entities_monkey;
     for (int i = 0; i < 20; i++) {
@@ -223,7 +218,7 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
         draw_Object1->transformation->setTranslate()->translation(glm::vec3(-5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX, 0, -5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX));
         entities_trees.push_back(draw_Object1);
     }
-
+    
     vector<DrawableObject*> entities_bushes;
     for (int i = 0; i < 40; i++) {
         DrawableObject* draw_Object1 = new DrawableObject(bushes, sizeof(bushes) / sizeof(bushes[0]), sm1_light, 0, 3, 6, 3);
@@ -244,7 +239,7 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             glfwSetCursorPosCallback(window, NULL);
         }
-       
+
         i += 0;
         
         camera->handleKeys(window);
@@ -257,13 +252,15 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
         
         for (DrawableObject* object : entities_cube) {
             object->draw(window, sizeof(sphere) / sizeof(sphere[0]));
-        }  
+        }
+        
         for (DrawableObject* object1 : entities_monkey) {
             object1->draw(window, sizeof(suziSmooth) / sizeof(suziSmooth[0]));
         }
         for (DrawableObject* object2 : entities_trees) {
             object2->draw(window, sizeof(tree) / sizeof(tree[0]));
         }
+        
         for (DrawableObject* object3 : entities_bushes) {
             object3->draw(window, sizeof(bushes) / sizeof(bushes[0]));
         }

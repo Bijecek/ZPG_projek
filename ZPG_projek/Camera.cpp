@@ -109,8 +109,6 @@ glm::vec3 Camera::getPosition() {
     return this->position;
 }
 void Camera::update() {
-    printf("Velikost obs\n");
-    printf("%d", this->obs.size());
     for (Observer *o : obs) {  
         o->notify();
     }
