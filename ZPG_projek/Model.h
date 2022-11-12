@@ -2,6 +2,7 @@
 #include <GL/glew.h>
 //Include GLFW
 #include <glfw3.h> 
+#include <SOIL.h>
 //Include the standard C++ headers  
 #include <stdlib.h>
 #include <stdio.h>
@@ -20,6 +21,6 @@ private:
 public:
 	Model();
 	Model(float* points_var, int size);
-	GLuint setVBOVAO(int index, int size, int count, int color_count);
+	GLuint setVBOVAO(bool isSkybox, int index, int size, int count, int color_count);
 };
 

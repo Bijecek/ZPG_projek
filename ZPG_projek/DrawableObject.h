@@ -28,7 +28,7 @@ public:
 	CompleteTransformation* transformation = new CompleteTransformation();
 
 public:
-	DrawableObject(float *points, int size, ShaderProgram* sp_light, int index, int size_index, int count, int color_count);
-	void draw(GLFWwindow* window, int size);
+	DrawableObject(bool isSkybox, float *points, int size, ShaderProgram* sp_light, int index, int size_index, int count, int color_count);
+	void draw(bool isSkybox, GLFWwindow* window, int size);
 };
 

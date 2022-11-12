@@ -76,13 +76,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\sisin\Downloads\glm_lib\glm_lib;C:\Users\sisin\Downloads\glew_32\glew_32\include;C:\Users\sisin\Downloads\glfw_32\glfw_32\include\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\sisin\Downloads\glm_lib\glm_lib;C:\Users\sisin\Downloads\glew_32\glew_32\include;C:\Users\sisin\Downloads\glfw_32\glfw_32\include\GLFW;C:\Users\sisin\Downloads\soil\soil\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\sisin\Downloads\glew_32\glew_32\lib\Release\Win32;C:\Users\sisin\Downloads\glfw_32\glfw_32\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;glfw3dll.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\sisin\Downloads\glew_32\glew_32\lib\Release\Win32;C:\Users\sisin\Downloads\glfw_32\glfw_32\lib-vc2022;C:\Users\sisin\Downloads\soil\soil\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glfw3dll.lib;glew32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -167,6 +167,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="skycube.h" />
     <ClInclude Include="Transformation.h" />
     <ClInclude Include="Translate.h" />
   </ItemGroup>
@@ -183,8 +184,12 @@
     <None Include="lighting_third_task_blue.vert" />
     <None Include="pyramid.frag" />
     <None Include="pyramid.vert" />
+    <None Include="skycube.frag" />
+    <None Include="skycube.vert" />
     <None Include="sphere.frag" />
     <None Include="sphere.vert" />
+    <None Include="texture.frag" />
+    <None Include="texture.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

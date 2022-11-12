@@ -7,6 +7,8 @@
 #include "base_rectangle.h"
 #include "bushes.h"
 #include "Observer.h";
+#include "plain.h"
+#include "skycube.h"
 Scene::Scene() {
    
 };
@@ -36,10 +38,10 @@ void Scene::drawFourSpheresScene(GLFWwindow* window, int width, int height)
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     float i = 0;
-    DrawableObject* draw_Object1 = new DrawableObject(sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
-    DrawableObject* draw_Object2 = new DrawableObject(sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
-    DrawableObject* draw_Object3 = new DrawableObject(sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
-    DrawableObject* draw_Object4 = new DrawableObject(sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
+    DrawableObject* draw_Object1 = new DrawableObject(false,sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
+    DrawableObject* draw_Object2 = new DrawableObject(false, sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
+    DrawableObject* draw_Object3 = new DrawableObject(false, sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
+    DrawableObject* draw_Object4 = new DrawableObject(false, sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
     draw_Object1->transformation->setScale()->scaling(glm::vec3(0.1f));
     draw_Object1->transformation->setTranslate()->translation(glm::vec3(-0.3f, 0, 0));
 
@@ -62,10 +64,10 @@ void Scene::drawFourSpheresScene(GLFWwindow* window, int width, int height)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         
-        draw_Object1->draw(window, sizeof(sphere) / sizeof(sphere[0]));
-        draw_Object2->draw(window, sizeof(sphere) / sizeof(sphere[0]));
-        draw_Object3->draw(window, sizeof(sphere) / sizeof(sphere[0]));
-        draw_Object4->draw(window, sizeof(sphere) / sizeof(sphere[0]));
+        draw_Object1->draw(false,window, sizeof(sphere) / sizeof(sphere[0]));
+        draw_Object2->draw(false, window, sizeof(sphere) / sizeof(sphere[0]));
+        draw_Object3->draw(false, window, sizeof(sphere) / sizeof(sphere[0]));
+        draw_Object4->draw(false, window, sizeof(sphere) / sizeof(sphere[0]));
 
      
         glfwPollEvents();
@@ -108,7 +110,7 @@ void Scene::drawOneSphereLight(GLFWwindow* window, int width, int height)
 
     float i = 0;
 
-    DrawableObject* draw_Object1 = new DrawableObject(sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
+    DrawableObject* draw_Object1 = new DrawableObject(false, sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
   
     draw_Object1->transformation->setScale()->scaling(glm::vec3(0.1f));
 
@@ -123,7 +125,7 @@ void Scene::drawOneSphereLight(GLFWwindow* window, int width, int height)
 
         
 
-        draw_Object1->draw(window, sizeof(sphere) / sizeof(sphere[0]));
+        draw_Object1->draw(false, window, sizeof(sphere) / sizeof(sphere[0]));
         glfwPollEvents();
         glfwSwapBuffers(window);
     }
@@ -139,24 +141,32 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     Camera* camera = new Camera(glm::vec3(0, 0, 1), 45.0f, width / (float)height, 0.1f, 100.0f);
     camera->setMovement(width, height);
     Scene::camera_movement = camera;
-
     
+    ShaderProgram* sp_skycube = new ShaderProgram();
+    sp_skycube->addShader("skycube.vert");
+    sp_skycube->addShader("skycube.frag");
+
+    sp_skycube->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-3, 0, 0), camera->getPosition());
+    sp_skycube->createShaderProgram();
+
+    sp_skycube->useCamera(camera);
+    
+
     ShaderProgram* sm_base_rectangle = new ShaderProgram();
-    sm_base_rectangle->addShader("pyramid.vert");
-    sm_base_rectangle->addShader("pyramid.frag");
+    //use this
+    //sm_base_rectangle->addShader("pyramid.vert");
+    //sm_base_rectangle->addShader("pyramid.frag");
+    
+    sm_base_rectangle->addShader("texture.vert");
+    sm_base_rectangle->addShader("texture.frag");
+    
     //sm_base_rectangle->addAmbientLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f));
     //sm_base_rectangle->addDiffuseLight(glm::vec3(-3, 0, 0));
     sm_base_rectangle->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-3, 0, 0), camera->getPosition());
     sm_base_rectangle->createShaderProgram();
     
+    //use this
     /*
-    ShaderProgram* sm1_light = new ShaderProgram();
-    sm1_light->addShader("lighting_first_task.vert");
-    sm1_light->addShader("lighting_first_task.frag");
-    sm1_light->addAmbientLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f));
-    sm1_light->addDiffuseLight(glm::vec3(-3, 0, 0));
-    sm1_light->createShaderProgram();
-    */
     ShaderProgram* sm1_light = new ShaderProgram();
     sm1_light->addShader("direct_light.vert");
     sm1_light->addShader("direct_light.frag");
@@ -167,9 +177,11 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     sm1_light->addDirectionalLight(glm::vec3(2, 5, 0));
     sm1_light->createShaderProgram();
     //sm1_light->useAllPointLights();
+    */
     
-
-    
+    sm_base_rectangle->useCamera(camera);
+    //use this
+    /*
     ShaderProgram* sm2_light = new ShaderProgram();
     sm2_light->addShader("lighting_third_task_blue.vert");
     sm2_light->addShader("lighting_third_task_blue.frag");
@@ -183,18 +195,24 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     
     
     sm1_light->useCamera(camera);
-
+    */
     //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     float i = 0;
     srand((unsigned)time(NULL));
+    DrawableObject* draw_Skycube = new DrawableObject(true,skycube, sizeof(skycube) / sizeof(skycube[0]), sp_skycube, 0, 3, 3, 0);
+    draw_Skycube->transformation->setTranslate()->translation(glm::vec3(0,0,1));
+    draw_Skycube->transformation->setScale()->scaling(glm::vec3(0.2f,0.2f,0.2f));
+
+
+
+    DrawableObject* draw_Object_rectangle = new DrawableObject(false,plain, sizeof(plain) / sizeof(plain[0]), sm_base_rectangle, 0, 3, 8, 3);
+//    draw_Object_rectangle->transformation->setTranslate()->translation(glm::vec3(-3, -0.5f, 0));
+     draw_Object_rectangle->transformation->setTranslate()->translation(glm::vec3(-3, -5, 0));
+    //draw_Object_rectangle->transformation->setRotate()->rotation(glm::radians(90.f), glm::vec3(1, 0, 0));
+    draw_Object_rectangle->transformation->setScale()->scaling(glm::vec3(50.f, 10.f, 50.f));
     
-    DrawableObject* draw_Object_rectangle = new DrawableObject(base_rectangle, sizeof(base_rectangle) / sizeof(base_rectangle[0]), sm_base_rectangle, 0, 4, 8, 4);
-    draw_Object_rectangle->transformation->setTranslate()->translation(glm::vec3(-3, -0.5f, 0));
-    draw_Object_rectangle->transformation->setRotate()->rotation(glm::radians(90.f), glm::vec3(1, 0, 0));
-    draw_Object_rectangle->transformation->setScale()->scaling(glm::vec3(50.f, 10.f, 10.f));
-    
-    
+    /*
     vector<DrawableObject*> entities_cube;
     for (int i = 0; i < 20; i++) {
         DrawableObject* draw_Object1 = new DrawableObject(sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
@@ -226,10 +244,9 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
         draw_Object1->transformation->setTranslate()->translation(glm::vec3(-5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX, 0, -5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX));
         entities_bushes.push_back(draw_Object1);
     }
-    
+    */
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
     while (!glfwWindowShouldClose(window)) {
         if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) {
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -241,15 +258,18 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
         }
 
         i += 0;
-        
+        glm::vec3 old_pos = camera->getPosition();
         camera->handleKeys(window);
+        glm::vec3 new_pos = camera->getPosition();
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-       
-        draw_Object_rectangle->draw(window, sizeof(base_rectangle) / sizeof(base_rectangle[0]));
+        draw_Skycube->transformation->setTranslate()->translation(glm::vec3(new_pos.x - old_pos.x, new_pos.y - old_pos.y, new_pos.z - old_pos.z));
+        draw_Skycube->draw(true,window, sizeof(skycube) / sizeof(skycube[0]));
+        glClear(GL_DEPTH_BUFFER_BIT);
+        draw_Object_rectangle->draw(false,window, sizeof(plain) / sizeof(plain[0]));
         
+        /*
         for (DrawableObject* object : entities_cube) {
             object->draw(window, sizeof(sphere) / sizeof(sphere[0]));
         }
@@ -264,7 +284,7 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
         for (DrawableObject* object3 : entities_bushes) {
             object3->draw(window, sizeof(bushes) / sizeof(bushes[0]));
         }
-        
+        */
         glfwPollEvents();
         glfwSwapBuffers(window);
     }
