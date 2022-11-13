@@ -31,6 +31,7 @@ public:
 
 
 	vector<glm::vec3> lightPositions;
+	vector<glm::vec3> lightDirections;
 
 	//try
 	GLuint vbovao_previous;

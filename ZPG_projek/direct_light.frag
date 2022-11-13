@@ -5,6 +5,7 @@ in vec3 Normal;
 in vec3 FragPos;  
 in vec3 ourColor;
   
+
 uniform float ambientStrength;
 uniform vec3 lightColor;
 
@@ -12,6 +13,8 @@ uniform vec3 lightPos;
 
 uniform vec3 viewPos; 
 
+
+/*
 //Pointlight
 uniform vec3 light_Pos[10];
 
@@ -25,7 +28,19 @@ uniform float cutOff_var;
 uniform float outerCut_var;
 uniform float flashlight_Strength;
 //uniform vec3 objectColor;
+*/
+struct Light_tmp{
+    int type;
+    vec3 light_Pos;
+    vec3 direct_Light_Direct;
+    vec3 lightPosition_var;
+    vec3 lightDirection_var;
+    float cutOff_var;
+    float outerCut_var;
+    float flashlight_Strength;
+};
 
+uniform Light_tmp lights[10];
 
 //texture
 uniform sampler2D texture_Sphere;
@@ -58,6 +73,7 @@ vec3 calculateDirectionalLight(vec3 lightDir_var){
     return(ambient+diffuse+specular);
         
 }
+
 vec3 calculatePointLight(vec3 light_Pos){
     vec3 ambient = ambientStrength * lightColor;
   	
@@ -84,7 +100,8 @@ vec3 calculatePointLight(vec3 light_Pos){
         
     return (ambient*attenuation + diffuse*attenuation + specular*attenuation);//* vec3(1,1,0);
 }
-vec3 calculateSpotLight(vec3 lightPosition_var, vec3 lightDirection_var, float cutOff_var, float outerCut_var, float flashlight_strength){
+
+vec3 calculateSpotLight(vec3 lightPosition_var, vec3 lightDirection_var, float cutOff_var, float outerCut_var, float flashlight_Strength){
      vec3 ambient = ambientStrength * lightColor;
   	
     // diffuse 
@@ -117,21 +134,15 @@ vec3 calculateSpotLight(vec3 lightPosition_var, vec3 lightDirection_var, float c
 }
 void main()
 {
-    vec3 result = vec3(0,0,0);
-    //amb
-    if(direct_Light_Direct != vec3(0,0,0)){
-        result = calculateDirectionalLight(direct_Light_Direct);// * vec3(1,1,0);//* ourColor;
-    }
-    //vec3 result = vec3(0,0,0);
-    for(int i=0;i<10;i++){
-        if(light_Pos[i] != vec3(0,0,0)){
 
-        result += calculatePointLight(light_Pos[i]);
-        
-        }
-    }
-    result+=calculateSpotLight(lightPosition_var, lightDirection_var, cutOff_var,outerCut_var,flashlight_Strength);
-    //result*= vec3(1,1,0);
+    vec3 result = vec3(0,0,0);
+
+    result +=  calculateDirectionalLight(lights[2].direct_Light_Direct);
+    result+= calculatePointLight(lights[0].light_Pos);
+    result+= calculatePointLight(lights[1].light_Pos);
+    result+=calculateSpotLight(lights[3].lightPosition_var, lights[3].lightDirection_var, lights[3].cutOff_var,lights[3].outerCut_var,lights[3].flashlight_Strength);
+
+   
     FragColor = vec4(result, 1.0) * texture(texture_Sphere, vec2(FragPos));
-    //FragColor = texture(texture_Sphere, vec2(FragPos));
+    
 } 

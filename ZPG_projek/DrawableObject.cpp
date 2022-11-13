@@ -32,9 +32,11 @@ void DrawableObject::draw(bool isSkybox, GLFWwindow *window,int size) {
     
     this->lighting_sp->setUniform_objectColor(glm::vec3(1, 1, 1));
 
-    this->lighting_sp->setUniform_ambientStrength(this->lighting_sp->point_light->getAmbientStrength());
+    if (this->lighting_sp->point_light != NULL) {
+        this->lighting_sp->setUniform_ambientStrength(this->lighting_sp->point_light->getAmbientStrength());
 
-    this->lighting_sp->setUniform_lightColor(this->lighting_sp->point_light->getLightColor());
+        this->lighting_sp->setUniform_lightColor(this->lighting_sp->point_light->getLightColor());
+    }
 
     //zakomentovane
     //this->lighting_sp->setUniform_lightPos(this->lighting_sp->dif_light->getLightPosition());

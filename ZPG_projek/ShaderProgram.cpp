@@ -153,34 +153,56 @@ void ShaderProgram::setUniform_projectionMatrix(glm::mat4 projectionMatrix)
 void ShaderProgram::addPointLight(float ambientStrength, glm::vec3 lightColor, glm::vec3 lightPos, glm::vec3 viewPos)
 {
 	this->point_light = new PointLight(ambientStrength, lightColor, lightPos, viewPos);
-	lightPositions.push_back(lightPos);
+	lightPositions.push_back(point_light->getLightPos());
 }
 
 void ShaderProgram::useAvailableLights(float value)
 {
 	this->useShaderProgram(this->shaderProgram);
-	GLint p_matrix_light = glGetUniformLocation(this->shaderProgram, "light_Pos");
-	glUniform3fv(p_matrix_light,lightPositions.size(), reinterpret_cast<GLfloat*>(lightPositions.data()));
-
-	if (this->directional_light != NULL) {
-		GLint direct_light = glGetUniformLocation(this->shaderProgram, "direct_Light_Direct");
-		glUniform3fv(direct_light, 1, glm::value_ptr(this->directional_light->getLight_Direction()));
+	int index = 0;
+	if (this->lightPositions.size() != 0) {
+		for (glm::vec3 position : lightPositions) {
+			std::string convert_toString = "lights[" + std::to_string(index) + "].light_Pos";
+			GLint p_matrix_light = glGetUniformLocation(this->shaderProgram, convert_toString.c_str());
+			glUniform3fv(p_matrix_light, 1, glm::value_ptr(this->lightPositions[index]));
+			index++;
+		}
+		//GLint p_matrix_light = glGetUniformLocation(this->shaderProgram, "lights[0].light_Pos");
+		//glUniform3fv(p_matrix_light, 1, glm::value_ptr(this->lightPositions[0]));
+		//GLint p_matrix_light1 = glGetUniformLocation(this->shaderProgram, "lights[1].light_Pos");
+		//glUniform3fv(p_matrix_light1, 1, glm::value_ptr(this->lightPositions[1]));
 	}
-	
-	GLint p_matrix_light12 = glGetUniformLocation(this->shaderProgram, "lightPosition_var");
+	int index2 = 0;
+	if (this->lightDirections.size() != 0) {
+		for (glm::vec3 direct: lightDirections) {
+			std::string convert_toString = "lights[" + std::to_string(index) + "].direct_Light_Direct";
+			GLint direct_light = glGetUniformLocation(this->shaderProgram, convert_toString.c_str());
+			glUniform3fv(direct_light, 1, glm::value_ptr(this->lightDirections[index2]));
+			index++;
+			index2++;
+		}
+		//GLint direct_light = glGetUniformLocation(this->shaderProgram, "lights[2].direct_Light_Direct");
+		//glUniform3fv(direct_light, 1, glm::value_ptr(this->directional_light->getLight_Direction()));
+	}
+	std::string convert_toString = "lights[" + std::to_string(index) + "].lightPosition_var";
+	GLint p_matrix_light12 = glGetUniformLocation(this->shaderProgram, convert_toString.c_str());
 	glUniform3fv(p_matrix_light12, 1, glm::value_ptr(this->camera->getPosition()));
 
-	GLint p_matrix_light13 = glGetUniformLocation(this->shaderProgram, "lightDirection_var");
+	convert_toString = "lights[" + std::to_string(index) + "].lightDirection_var";
+	GLint p_matrix_light13 = glGetUniformLocation(this->shaderProgram, convert_toString.c_str());
 	glUniform3fv(p_matrix_light13, 1, glm::value_ptr(this->camera->front));
 	
-	GLint p_matrix_light14 = glGetUniformLocation(this->shaderProgram, "cutOff_var");
+	convert_toString = "lights[" + std::to_string(index) + "].cutOff_var";
+	GLint p_matrix_light14 = glGetUniformLocation(this->shaderProgram, convert_toString.c_str());
 	glUniform1f(p_matrix_light14, glm::cos(glm::radians(12.5f)));
 
-	GLint p_matrix_light15 = glGetUniformLocation(this->shaderProgram, "outerCut_var");
+	convert_toString = "lights[" + std::to_string(index) + "].outerCut_var";
+	GLint p_matrix_light15 = glGetUniformLocation(this->shaderProgram, convert_toString.c_str());
 	glUniform1f(p_matrix_light15, glm::cos(glm::radians(15.0f)));
 
 	if (value >= 0) {
-		GLint p_matrix_light16 = glGetUniformLocation(this->shaderProgram, "flashlight_Strength");
+		convert_toString = "lights[" + std::to_string(index) + "].flashlight_Strength";
+		GLint p_matrix_light16 = glGetUniformLocation(this->shaderProgram, convert_toString.c_str());
 		glUniform1f(p_matrix_light16, value);
 	}
 }
@@ -188,6 +210,7 @@ void ShaderProgram::useAvailableLights(float value)
 void ShaderProgram::addDirectionalLight(glm::vec3 direction)
 {
 	this->directional_light = new DirectionalLight(direction);
+	lightDirections.push_back(directional_light->getLight_Direction());
 }
 
 void ShaderProgram::setTexture(const char* texture_name)

@@ -146,7 +146,7 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     sp_skycube->addShader("skycube.vert");
     sp_skycube->addShader("skycube.frag");
 
-    sp_skycube->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-3, 0, 0), camera->getPosition());
+    //sp_skycube->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-3, 0, 0), camera->getPosition());
     sp_skycube->createShaderProgram();
 
     sp_skycube->useCamera(camera);
@@ -162,7 +162,7 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     
     //sm_base_rectangle->addAmbientLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f));
     //sm_base_rectangle->addDiffuseLight(glm::vec3(-3, 0, 0));
-    sm_base_rectangle->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-3, 0, 0), camera->getPosition());
+    //sm_base_rectangle->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-3, 0, 0), camera->getPosition());
     sm_base_rectangle->createShaderProgram();
     
     //use this
