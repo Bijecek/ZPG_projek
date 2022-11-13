@@ -11,6 +11,7 @@ ShaderProgram::ShaderProgram(Camera *camera) {
 	this->shader_code = {};
 	//camera->attachObs(this);
 	this->camera = camera;
+	this->camera->attach(this);
 };
 
 void ShaderProgram::addShader(std::string path) {
@@ -223,11 +224,12 @@ const char* ShaderProgram::getTexture()
 	return this->texture_name;
 }
 
-/*
-void ShaderProgram::notify()
-{
-	//cout << "Notified in sp" << endl;
-	GLint v_matrix_id_light = glGetUniformLocation(this->shaderProgram, "viewMatrix");
-	glUniformMatrix4fv(v_matrix_id_light, 1, GL_FALSE, &this->camera->getView()[0][0]);
+
+void ShaderProgram::update(Subject* sub) {
+	if (sub == camera) {
+		cout << "Notified in sp" << endl;
+		setUniform_viewPos(this->camera->getPosition());
+		setUniform_viewMatrix(this->camera->getView());
+		setUniform_projectionMatrix(this->camera->getProjection());
+	}
 }
-*/

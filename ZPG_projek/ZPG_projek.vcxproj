@@ -136,7 +136,6 @@
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="DrawableObject.cpp" />
     <ClCompile Include="four_spheres_scene.cpp" />
-    <ClCompile Include="Observer.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Rotate.cpp" />
     <ClCompile Include="Scale.cpp" />
@@ -144,6 +143,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Subject.cpp" />
     <ClCompile Include="Transformation.cpp" />
     <ClCompile Include="Translate.cpp" />
     <ClCompile Include="ZPG_projek.cpp" />
@@ -168,12 +168,13 @@
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="skycube.h" />
+    <ClInclude Include="Subject.h" />
     <ClInclude Include="Transformation.h" />
     <ClInclude Include="Translate.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="direct_light.frag" />
-    <None Include="direct_light.vert" />
+    <None Include="light_w_texture.frag" />
+    <None Include="light_w_texture.vert" />
     <None Include="lighting_first_task.frag" />
     <None Include="lighting_first_task.vert" />
     <None Include="lighting_second_task_right.frag" />
@@ -188,8 +189,19 @@
     <None Include="skycube.vert" />
     <None Include="sphere.frag" />
     <None Include="sphere.vert" />
-    <None Include="texture.frag" />
-    <None Include="texture.vert" />
+    <None Include="plain.frag" />
+    <None Include="plain.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Textures\grass.png" />
+    <Image Include="Textures\ice_texture_png.png" />
+    <Image Include="Textures\lava_texture_png.png" />
+    <Image Include="Textures\negx.jpg" />
+    <Image Include="Textures\negy.jpg" />
+    <Image Include="Textures\negz.jpg" />
+    <Image Include="Textures\posx.jpg" />
+    <Image Include="Textures\posy.jpg" />
+    <Image Include="Textures\posz.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

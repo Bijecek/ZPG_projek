@@ -91,23 +91,33 @@ void Camera::handleMouse(GLFWwindow* window, double xpos, double ypos) {
     direction.y = sin(glm::radians(pitch));
     direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
     front = glm::normalize(direction);
+    notify();
 }
 void Camera::handleKeys(GLFWwindow* window) {
     const float cameraSpeed = 0.02f;
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         position += cameraSpeed * front;
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        notify();
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
         position -= cameraSpeed * front;
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        notify();
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
         position -= glm::normalize(glm::cross(front, camera_up)) * cameraSpeed;
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        notify();
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
         position += glm::normalize(glm::cross(front, camera_up)) * cameraSpeed;
+        notify();
+    }
     //update();
 }
 
 glm::vec3 Camera::getPosition() {
     return this->position;
 }
+/*
 void Camera::update() {
     for (Observer *o : obs) {  
         o->notify();
@@ -117,3 +127,5 @@ void Camera::update() {
 void Camera::attachObs(Observer* obs) {
     this->obs.push_back(obs);
 }
+*/
+

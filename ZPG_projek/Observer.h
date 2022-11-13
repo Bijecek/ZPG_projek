@@ -1,13 +1,7 @@
 #pragma once
-//Class subject
+class Subject;
 class Observer
 {
 public:
-	virtual void notify() = 0;
+	virtual void update(Subject *sub) = 0;
 };
-
-// include Observer
-// Subject classa:
-//Attach Observer
-//Notify
-//vector observers

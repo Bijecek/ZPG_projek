@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\textures">
+      <UniqueIdentifier>{502aa127-f971-45b0-8c19-ccb910b68f40}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ZPG_projek.cpp">
@@ -57,13 +60,13 @@
     <ClCompile Include="four_spheres_scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Observer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PointLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DirectionalLight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Subject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -116,9 +119,6 @@
     <ClInclude Include="base_rectangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Observer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PointLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -129,6 +129,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="skycube.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Observer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Subject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -169,16 +175,16 @@
     <None Include="lighting_third_task_blue.frag">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="direct_light.frag">
+    <None Include="light_w_texture.frag">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="direct_light.vert">
+    <None Include="light_w_texture.vert">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="texture.vert">
+    <None Include="plain.vert">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="texture.frag">
+    <None Include="plain.frag">
       <Filter>Source Files</Filter>
     </None>
     <None Include="skycube.vert">
@@ -187,5 +193,34 @@
     <None Include="skycube.frag">
       <Filter>Source Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Textures\grass.png">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="Textures\ice_texture_png.png">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="Textures\lava_texture_png.png">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="Textures\negx.jpg">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="Textures\negy.jpg">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="Textures\negz.jpg">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="Textures\posx.jpg">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="Textures\posy.jpg">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="Textures\posz.jpg">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
   </ItemGroup>
 </Project>

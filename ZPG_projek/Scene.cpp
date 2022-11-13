@@ -142,62 +142,34 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     camera->setMovement(width, height);
     Scene::camera_movement = camera;
     
-    ShaderProgram* sp_skycube = new ShaderProgram();
+    ShaderProgram* sp_skycube = new ShaderProgram(camera);
     sp_skycube->addShader("skycube.vert");
     sp_skycube->addShader("skycube.frag");
 
-    //sp_skycube->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-3, 0, 0), camera->getPosition());
     sp_skycube->createShaderProgram();
 
-    sp_skycube->useCamera(camera);
     
 
-    ShaderProgram* sm_base_rectangle = new ShaderProgram();
-    //use this
-    //sm_base_rectangle->addShader("pyramid.vert");
-    //sm_base_rectangle->addShader("pyramid.frag");
-    
-    sm_base_rectangle->addShader("texture.vert");
-    sm_base_rectangle->addShader("texture.frag");
-    
-    //sm_base_rectangle->addAmbientLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f));
-    //sm_base_rectangle->addDiffuseLight(glm::vec3(-3, 0, 0));
-    //sm_base_rectangle->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-3, 0, 0), camera->getPosition());
-    sm_base_rectangle->createShaderProgram();
-    
-    //use this
-    
-    ShaderProgram* sm1_light = new ShaderProgram();
-    sm1_light->addShader("direct_light.vert");
-    sm1_light->addShader("direct_light.frag");
-    //sm1_light->addAmbientLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f));
-    //sm1_light->addDiffuseLight(glm::vec3(-3, 3, 3));
-    sm1_light->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(2, 0, 0), camera->getPosition());
-    sm1_light->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(5,0,0), camera->getPosition());
-    sm1_light->addDirectionalLight(glm::vec3(2, 5, 0));
-    sm1_light->createShaderProgram();
-    //sm1_light->useAllPointLights();
-    
-    
-    sm_base_rectangle->useCamera(camera);
-    sm1_light->useCamera(camera);
-    //use this
-    /*
-    ShaderProgram* sm2_light = new ShaderProgram();
-    sm2_light->addShader("lighting_third_task_blue.vert");
-    sm2_light->addShader("lighting_third_task_blue.frag");
+    ShaderProgram* sp_plain = new ShaderProgram(camera);
 
-    sm2_light->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-3, 0, 0), camera->getPosition());
-    sm2_light->createShaderProgram();
-   
-    sm_base_rectangle->useCamera(camera);
- 
-    sm2_light->useCamera(camera);
     
+    sp_plain->addShader("plain.vert");
+    sp_plain->addShader("plain.frag");
     
+
+    sp_plain->createShaderProgram();
     
-    */
-    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+    
+    ShaderProgram* sp_Object_w_texture = new ShaderProgram(camera);
+    sp_Object_w_texture->addShader("light_w_texture.vert");
+    sp_Object_w_texture->addShader("light_w_texture.frag");
+
+    sp_Object_w_texture->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(2, 0, 0), camera->getPosition());
+    sp_Object_w_texture->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(5,0,0), camera->getPosition());
+    sp_Object_w_texture->addDirectionalLight(glm::vec3(2, 5, 0));
+    sp_Object_w_texture->createShaderProgram();
+
 
     float i = 0;
     srand((unsigned)time(NULL));
@@ -208,31 +180,29 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
 
 
 
-    DrawableObject* draw_Plain = new DrawableObject(false,false,true,plain, sizeof(plain) / sizeof(plain[0]), sm_base_rectangle, 0, 3, 8, 3);
-//    draw_Object_rectangle->transformation->setTranslate()->translation(glm::vec3(-3, -0.5f, 0));
+    DrawableObject* draw_Plain = new DrawableObject(false,false,true,plain, sizeof(plain) / sizeof(plain[0]), sp_plain, 0, 3, 8, 3);
     draw_Plain->transformation->setTranslate()->translation(glm::vec3(-3, -5, 0));
-    //draw_Object_rectangle->transformation->setRotate()->rotation(glm::radians(90.f), glm::vec3(1, 0, 0));
     draw_Plain->transformation->setScale()->scaling(glm::vec3(50.f, 10.f, 50.f));
     
     
-    sm1_light->setTexture("lava_texture_png.png");
+    sp_Object_w_texture->setTexture("Textures/lava_texture_png.png");
     vector<DrawableObject*> entities_cube;
     for (int i = 0; i < 20; i++) {
-        DrawableObject* draw_Object1 = new DrawableObject(true, false, false, sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
+        DrawableObject* draw_Object1 = new DrawableObject(true, false, false, sphere, sizeof(sphere) / sizeof(sphere[0]), sp_Object_w_texture, 0, 3, 6, 3);
         draw_Object1->transformation->setScale()->scaling(glm::vec3(0.1f));
         draw_Object1->transformation->setTranslate()->translation(glm::vec3(-5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX, -4.9f, -5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX));
         entities_cube.push_back(draw_Object1);
     }
-    sm1_light->vbovao_previous = NULL;
-    sm1_light->setTexture("ice_texture_png.png");
+    sp_Object_w_texture->vbovao_previous = NULL;
+    sp_Object_w_texture->setTexture("Textures/ice_texture_png.png");
     vector<DrawableObject*> entities_monkey;
     for (int i = 0; i < 20; i++) {
-        DrawableObject* draw_Object1 = new DrawableObject(true, false,false,suziSmooth, sizeof(suziSmooth) / sizeof(suziSmooth[0]), sm1_light, 0, 3, 6, 3);
+        DrawableObject* draw_Object1 = new DrawableObject(true, false,false,suziSmooth, sizeof(suziSmooth) / sizeof(suziSmooth[0]), sp_Object_w_texture, 0, 3, 6, 3);
         draw_Object1->transformation->setScale()->scaling(glm::vec3(0.1f));
         draw_Object1->transformation->setTranslate()->translation(glm::vec3(-5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX, -4.9f, -5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX));
         entities_monkey.push_back(draw_Object1);
     }
-    sm1_light->vbovao_previous = NULL;
+    sp_Object_w_texture->vbovao_previous = NULL;
     /*
     vector<DrawableObject*> entities_trees;
     for (int i = 0; i < 20; i++) {
@@ -251,6 +221,7 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     }
     */
 
+
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     while (!glfwWindowShouldClose(window)) {
         if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) {
@@ -261,6 +232,7 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             glfwSetCursorPosCallback(window, NULL);
         }
+
 
         i += 0;
         glm::vec3 old_pos = camera->getPosition();

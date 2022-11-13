@@ -40,9 +40,9 @@ GLuint Model::setVBOVAO(const char* texture_name, bool isSkybox,bool isPlain, in
     if (isPlain) {
         
         glActiveTexture(GL_TEXTURE0);
-        GLuint textureID = SOIL_load_OGL_texture("grass.png", SOIL_LOAD_RGBA, SOIL_CREATE_NEW_ID/*, SOIL_FLAG_TEXTURE_REPEATS*/, NULL);
+        GLuint textureID = SOIL_load_OGL_texture("Textures/grass.png", SOIL_LOAD_RGBA, SOIL_CREATE_NEW_ID/*, SOIL_FLAG_TEXTURE_REPEATS*/, NULL);
         if (textureID == NULL) {
-            std::cout << "An error occurred while loading image." << std::endl;
+            std::cout << "Aan error occurred while loading image." << std::endl;
             exit(EXIT_FAILURE);
         }
 
@@ -69,7 +69,7 @@ GLuint Model::setVBOVAO(const char* texture_name, bool isSkybox,bool isPlain, in
     else if(isSkybox) {
         
         glActiveTexture(GL_TEXTURE0);
-        GLuint image = SOIL_load_OGL_cubemap("posx.jpg", "negx.jpg", "posy.jpg", "negy.jpg", "posz.jpg", "negz.jpg", SOIL_LOAD_RGB, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
+        GLuint image = SOIL_load_OGL_cubemap("Textures/posx.jpg", "Textures/negx.jpg", "Textures/posy.jpg", "Textures/negy.jpg", "Textures/posz.jpg", "Textures/negz.jpg", SOIL_LOAD_RGB, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
         if (image == NULL) {
             std::cout << "An error occurred while loading image." << std::endl;
             exit(EXIT_FAILURE);

@@ -12,14 +12,13 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include "Observer.h"
 #include "PointLight.h"
 #include "DirectionalLight.h"
 #include "Model.h"
 
 using namespace std;
 
-class ShaderProgram// : public Observer
+class ShaderProgram : public Observer
 {
 public:
 	vector<Shader*> shader_Array;
@@ -66,6 +65,7 @@ public:
 
 	void setTexture(const char* texture_name);
 	const char* getTexture();
+	void update(Subject* sub);
 	// Inherited via Observer
 	//virtual void notify() override;
 };

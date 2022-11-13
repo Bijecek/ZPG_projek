@@ -14,12 +14,12 @@
 #include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
 #include <glm/gtc/type_ptr.hpp> // glm::value_ptr
 #include <cmath>
-#include "Observer.h"
-//include Subject
+//#include "Observer.h"
+#include "Subject.h"
 //class Observer;
 using namespace std;
 
-class Camera //dedi ze subjectu)
+class Camera : public Subject//dedi ze subjectu)
 {
 private:
 	float fov;
@@ -53,8 +53,10 @@ public:
 	void handleKeys(GLFWwindow* window);
 	glm::vec3 getPosition();
 
-	vector<Observer*> obs;
-	void update();
-	void attachObs(Observer* obs);
+	//vector<Observer*> obs;
+	//void update();
+	//void attachObs(Observer* obs);
+
+	
 };
 

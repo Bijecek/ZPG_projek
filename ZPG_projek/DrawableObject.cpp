@@ -40,19 +40,19 @@ void DrawableObject::draw(bool isSkybox, GLFWwindow *window,int size) {
 
     //zakomentovane
     //this->lighting_sp->setUniform_lightPos(this->lighting_sp->dif_light->getLightPosition());
+    this->lighting_sp->setUniform_modelMatrix(this->transformation->getMatrix());
+    //odkomentovat
     
-
     this->lighting_sp->setUniform_viewPos(this->lighting_sp->camera->getPosition());
 
-    this->lighting_sp->setUniform_modelMatrix(this->transformation->getMatrix());
 
 
-
+    //odkomentovat
     this->lighting_sp->setUniform_viewMatrix(this->lighting_sp->camera->getView());
 
-
+    //odkomentovat
     this->lighting_sp->setUniform_projectionMatrix(this->lighting_sp->camera->getProjection());
-
+    
     
 
     GLint uniformID = glGetUniformLocation(this->lighting_sp->shaderProgram, "textureUnitID");
