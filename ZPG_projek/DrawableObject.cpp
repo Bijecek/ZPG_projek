@@ -1,14 +1,33 @@
 #include "DrawableObject.h"
-DrawableObject::DrawableObject(bool isSkybox, bool isPlain, float *points, int size, ShaderProgram *sp_light, int index, int size_index, int count, int color_count) {
-	Model temp(points, size);
-    this->lighting_model = temp;
-    this->lighting_VAO = lighting_model.setVBOVAO(isSkybox,isPlain,index, size_index, count, color_count);
-    this->lighting_sp = sp_light;
+DrawableObject::DrawableObject(bool moreObjects, bool isSkybox, bool isPlain, float* points, int size, ShaderProgram* sp_light, int index, int size_index, int count, int color_count) {
+    Model *temp = new Model();
+    if (sp_light->vbovao_previous == NULL) {
+        temp = new Model(points, size);
+        this->lighting_model = temp;
+        this->lighting_VAO = lighting_model->setVBOVAO(sp_light->getTexture(), isSkybox, isPlain, index, size_index, count, color_count);
+        this->lighting_sp = sp_light;
+        this->texture_id = lighting_model->getTextureId();
+    }
+    else {
+        temp = new Model(points, size);
+        this->lighting_model = temp;
+        this->lighting_VAO = sp_light->vbovao_previous;
+        this->lighting_sp = sp_light;
+        this->texture_id = sp_light->saveTextureId;
+    }
+    if (moreObjects) {
+        sp_light->vbovao_previous = this->lighting_VAO;
+        sp_light->saveTextureId = this->texture_id;
+    }
     //this->lighting_sp->createShaderProgram();
 
 }
 
 void DrawableObject::draw(bool isSkybox, GLFWwindow *window,int size) {
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, this->getTextureId());
+
+
     this->lighting_sp->useShaderProgram(this->lighting_sp->shaderProgram);
     
     this->lighting_sp->setUniform_objectColor(glm::vec3(1, 1, 1));
@@ -74,4 +93,9 @@ void DrawableObject::draw(bool isSkybox, GLFWwindow *window,int size) {
         }
     }
    
+}
+
+GLuint DrawableObject::getTextureId()
+{
+    return this->texture_id;
 }

@@ -190,6 +190,16 @@ void ShaderProgram::addDirectionalLight(glm::vec3 direction)
 	this->directional_light = new DirectionalLight(direction);
 }
 
+void ShaderProgram::setTexture(const char* texture_name)
+{
+	this->texture_name = texture_name;
+}
+
+const char* ShaderProgram::getTexture()
+{
+	return this->texture_name;
+}
+
 /*
 void ShaderProgram::notify()
 {

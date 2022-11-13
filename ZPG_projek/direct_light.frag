@@ -132,6 +132,6 @@ void main()
     }
     result+=calculateSpotLight(lightPosition_var, lightDirection_var, cutOff_var,outerCut_var,flashlight_Strength);
     //result*= vec3(1,1,0);
-    FragColor = vec4(result, 1.0) * texture(texture_Sphere, vec2(Normal));
+    FragColor = vec4(result, 1.0) * texture(texture_Sphere, vec2(FragPos));
     //FragColor = texture(texture_Sphere, vec2(FragPos));
 } 

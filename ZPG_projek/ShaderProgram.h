@@ -15,6 +15,7 @@
 #include "Observer.h"
 #include "PointLight.h"
 #include "DirectionalLight.h"
+#include "Model.h"
 
 using namespace std;
 
@@ -31,6 +32,10 @@ public:
 
 	vector<glm::vec3> lightPositions;
 
+	//try
+	GLuint vbovao_previous;
+	GLuint saveTextureId;
+	const char* texture_name;
 public:
 	Camera* camera;
 	ShaderProgram();
@@ -57,6 +62,9 @@ public:
 	void useAvailableLights(float value);
 
 	void addDirectionalLight(glm::vec3 direction);
+
+	void setTexture(const char* texture_name);
+	const char* getTexture();
 	// Inherited via Observer
 	//virtual void notify() override;
 };

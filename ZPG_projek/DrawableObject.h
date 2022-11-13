@@ -21,14 +21,16 @@
 class DrawableObject : public CompleteTransformation
 {
 private:
-	Model lighting_model;
+	Model *lighting_model;
 	ShaderProgram *lighting_sp;
 	GLuint lighting_VAO;
+	GLuint texture_id;
 public:
 	CompleteTransformation* transformation = new CompleteTransformation();
 
 public:
-	DrawableObject(bool isSkybox, bool isPlain,float *points, int size, ShaderProgram* sp_light, int index, int size_index, int count, int color_count);
+	DrawableObject(bool moreObjects, bool isSkybox, bool isPlain, float* points, int size, ShaderProgram* sp_light, int index, int size_index, int count, int color_count);
 	void draw(bool isSkybox, GLFWwindow* window, int size);
+	GLuint getTextureId();
 };
 

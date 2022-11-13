@@ -14,7 +14,7 @@ Model::Model(float *points_var, int size) {
 }
 
 
-GLuint Model::setVBOVAO(bool isSkybox,bool isPlain, int index, int size, int count, int color_count)
+GLuint Model::setVBOVAO(const char* texture_name, bool isSkybox,bool isPlain, int index, int size, int count, int color_count)
 {
     glGenBuffers(1, &VBO); // generate the VBO
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -60,6 +60,7 @@ GLuint Model::setVBOVAO(bool isSkybox,bool isPlain, int index, int size, int cou
     //    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+        this->texture_id = textureID;
 
 
         //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
@@ -79,20 +80,23 @@ GLuint Model::setVBOVAO(bool isSkybox,bool isPlain, int index, int size, int cou
 
         glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
+        this->texture_id = image;
+
     }
     else if (!isSkybox && !isPlain) {
         glActiveTexture(GL_TEXTURE0);
-        GLuint textureID2 = SOIL_load_OGL_texture("ice_texture_png.png", SOIL_LOAD_RGBA, SOIL_CREATE_NEW_ID/*, SOIL_FLAG_TEXTURE_REPEATS*/, NULL);
+        GLuint textureID2 = SOIL_load_OGL_texture(texture_name, SOIL_LOAD_RGBA, SOIL_CREATE_NEW_ID/*, SOIL_FLAG_TEXTURE_REPEATS*/, NULL);
         if (textureID2 == NULL) {
             std::cout << "An error occurred while loading image." << std::endl;
             exit(EXIT_FAILURE);
         }
 
         //glGenerateMipmap(GL_TEXTURE_2D);
+        cout << "Texture sphere" << endl;
         cout << textureID2 << endl;
         
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         //    glGenerateMipmap(GL_TEXTURE_2D);
         //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
         //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
@@ -103,6 +107,13 @@ GLuint Model::setVBOVAO(bool isSkybox,bool isPlain, int index, int size, int cou
     //    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glBindTexture(GL_TEXTURE_2D, textureID2);
+
+        this->texture_id = textureID2;
     }
     return VAO;
+}
+
+GLuint Model::getTextureId()
+{
+    return this->texture_id;
 }

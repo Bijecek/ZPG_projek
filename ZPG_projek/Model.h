@@ -18,9 +18,11 @@ private:
 	GLuint VBO;
 	GLuint VAO;
 	vector<float> points_vector;
+	GLuint texture_id;
 public:
 	Model();
 	Model(float* points_var, int size);
-	GLuint setVBOVAO(bool isSkybox, bool isPlain,int index, int size, int count, int color_count);
+	GLuint setVBOVAO(const char* texture_name,bool isSkybox, bool isPlain,int index, int size, int count, int color_count);
+	GLuint getTextureId();
 };
 
