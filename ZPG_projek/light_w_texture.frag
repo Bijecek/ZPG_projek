@@ -137,11 +137,20 @@ void main()
 
     vec3 result = vec3(0,0,0);
 
-    result +=  calculateDirectionalLight(lights[2].direct_Light_Direct);
-    result+= calculatePointLight(lights[0].light_Pos);
-    result+= calculatePointLight(lights[1].light_Pos);
-    result+=calculateSpotLight(lights[3].lightPosition_var, lights[3].lightDirection_var, lights[3].cutOff_var,lights[3].outerCut_var,lights[3].flashlight_Strength);
-
+    for(int i=0;i<10;i++){
+        if(lights[i].type != 0 || lights[i].type != 1 || lights[i].type != 2){
+            if(lights[i].type == 0){
+                result+= calculatePointLight(lights[i].light_Pos);
+            }
+            else if(lights[i].type == 1){
+                result +=  calculateDirectionalLight(lights[i].direct_Light_Direct);
+            
+            }
+            else if(lights[i].type == 2){
+                result+=calculateSpotLight(lights[i].lightPosition_var, lights[i].lightDirection_var, lights[i].cutOff_var,lights[i].outerCut_var,lights[i].flashlight_Strength);   
+            }
+        }
+    }
    
     FragColor = vec4(result, 1.0) * texture(texture_Sphere, vec2(FragPos));
     

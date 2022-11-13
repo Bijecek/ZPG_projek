@@ -166,6 +166,10 @@ void ShaderProgram::useAvailableLights(float value)
 			std::string convert_toString = "lights[" + std::to_string(index) + "].light_Pos";
 			GLint p_matrix_light = glGetUniformLocation(this->shaderProgram, convert_toString.c_str());
 			glUniform3fv(p_matrix_light, 1, glm::value_ptr(this->lightPositions[index]));
+
+			std::string convert_toString1 = "lights[" + std::to_string(index) + "].type";
+			GLint p_matrix_light_type = glGetUniformLocation(this->shaderProgram, convert_toString1.c_str());
+			glUniform1i(p_matrix_light_type, 1);
 			index++;
 		}
 		//GLint p_matrix_light = glGetUniformLocation(this->shaderProgram, "lights[0].light_Pos");
@@ -179,12 +183,19 @@ void ShaderProgram::useAvailableLights(float value)
 			std::string convert_toString = "lights[" + std::to_string(index) + "].direct_Light_Direct";
 			GLint direct_light = glGetUniformLocation(this->shaderProgram, convert_toString.c_str());
 			glUniform3fv(direct_light, 1, glm::value_ptr(this->lightDirections[index2]));
+
+			std::string convert_toString1 = "lights[" + std::to_string(index) + "].type";
+			GLint p_matrix_light_type1 = glGetUniformLocation(this->shaderProgram, convert_toString1.c_str());
+			glUniform1i(p_matrix_light_type1, 0);
 			index++;
 			index2++;
 		}
 		//GLint direct_light = glGetUniformLocation(this->shaderProgram, "lights[2].direct_Light_Direct");
 		//glUniform3fv(direct_light, 1, glm::value_ptr(this->directional_light->getLight_Direction()));
 	}
+	std::string convert_toString1 = "lights[" + std::to_string(index) + "].type";
+	GLint p_matrix_light_type2 = glGetUniformLocation(this->shaderProgram, convert_toString1.c_str());
+	glUniform1i(p_matrix_light_type2, 2);
 	std::string convert_toString = "lights[" + std::to_string(index) + "].lightPosition_var";
 	GLint p_matrix_light12 = glGetUniformLocation(this->shaderProgram, convert_toString.c_str());
 	glUniform3fv(p_matrix_light12, 1, glm::value_ptr(this->camera->getPosition()));
