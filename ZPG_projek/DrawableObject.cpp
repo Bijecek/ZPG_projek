@@ -1,8 +1,8 @@
 #include "DrawableObject.h"
-DrawableObject::DrawableObject(bool isSkybox, float *points, int size, ShaderProgram *sp_light, int index, int size_index, int count, int color_count) {
+DrawableObject::DrawableObject(bool isSkybox, bool isPlain, float *points, int size, ShaderProgram *sp_light, int index, int size_index, int count, int color_count) {
 	Model temp(points, size);
     this->lighting_model = temp;
-    this->lighting_VAO = lighting_model.setVBOVAO(isSkybox,index, size_index, count, color_count);
+    this->lighting_VAO = lighting_model.setVBOVAO(isSkybox,isPlain,index, size_index, count, color_count);
     this->lighting_sp = sp_light;
     //this->lighting_sp->createShaderProgram();
 
@@ -39,6 +39,8 @@ void DrawableObject::draw(bool isSkybox, GLFWwindow *window,int size) {
 
     GLint uniformID1 = glGetUniformLocation(this->lighting_sp->shaderProgram, "cubeID");
     glUniform1i(uniformID1, 0);
+    GLint uniformID2 = glGetUniformLocation(this->lighting_sp->shaderProgram, "texture_Sphere");
+    glUniform1i(uniformID2, 0);
 
     //this->lighting_sp->useAllPointLights();
 

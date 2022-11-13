@@ -38,10 +38,10 @@ void Scene::drawFourSpheresScene(GLFWwindow* window, int width, int height)
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     float i = 0;
-    DrawableObject* draw_Object1 = new DrawableObject(false,sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
-    DrawableObject* draw_Object2 = new DrawableObject(false, sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
-    DrawableObject* draw_Object3 = new DrawableObject(false, sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
-    DrawableObject* draw_Object4 = new DrawableObject(false, sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
+    DrawableObject* draw_Object1 = new DrawableObject(false,false,sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
+    DrawableObject* draw_Object2 = new DrawableObject(false, false, sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
+    DrawableObject* draw_Object3 = new DrawableObject(false, false, sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
+    DrawableObject* draw_Object4 = new DrawableObject(false, false, sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
     draw_Object1->transformation->setScale()->scaling(glm::vec3(0.1f));
     draw_Object1->transformation->setTranslate()->translation(glm::vec3(-0.3f, 0, 0));
 
@@ -110,7 +110,7 @@ void Scene::drawOneSphereLight(GLFWwindow* window, int width, int height)
 
     float i = 0;
 
-    DrawableObject* draw_Object1 = new DrawableObject(false, sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
+    DrawableObject* draw_Object1 = new DrawableObject(false, false, sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
   
     draw_Object1->transformation->setScale()->scaling(glm::vec3(0.1f));
 
@@ -166,7 +166,7 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     sm_base_rectangle->createShaderProgram();
     
     //use this
-    /*
+    
     ShaderProgram* sm1_light = new ShaderProgram();
     sm1_light->addShader("direct_light.vert");
     sm1_light->addShader("direct_light.frag");
@@ -177,9 +177,10 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     sm1_light->addDirectionalLight(glm::vec3(2, 5, 0));
     sm1_light->createShaderProgram();
     //sm1_light->useAllPointLights();
-    */
+    
     
     sm_base_rectangle->useCamera(camera);
+    sm1_light->useCamera(camera);
     //use this
     /*
     ShaderProgram* sm2_light = new ShaderProgram();
@@ -194,33 +195,34 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     sm2_light->useCamera(camera);
     
     
-    sm1_light->useCamera(camera);
+    
     */
     //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     float i = 0;
     srand((unsigned)time(NULL));
-    DrawableObject* draw_Skycube = new DrawableObject(true,skycube, sizeof(skycube) / sizeof(skycube[0]), sp_skycube, 0, 3, 3, 0);
+    
+    DrawableObject* draw_Skycube = new DrawableObject(true, false, skycube, sizeof(skycube) / sizeof(skycube[0]), sp_skycube, 0, 3, 3, 0);
     draw_Skycube->transformation->setTranslate()->translation(glm::vec3(0,0,1));
     draw_Skycube->transformation->setScale()->scaling(glm::vec3(0.2f,0.2f,0.2f));
 
 
 
-    DrawableObject* draw_Object_rectangle = new DrawableObject(false,plain, sizeof(plain) / sizeof(plain[0]), sm_base_rectangle, 0, 3, 8, 3);
+    DrawableObject* draw_Object_rectangle = new DrawableObject(false,true,plain, sizeof(plain) / sizeof(plain[0]), sm_base_rectangle, 0, 3, 8, 3);
 //    draw_Object_rectangle->transformation->setTranslate()->translation(glm::vec3(-3, -0.5f, 0));
      draw_Object_rectangle->transformation->setTranslate()->translation(glm::vec3(-3, -5, 0));
     //draw_Object_rectangle->transformation->setRotate()->rotation(glm::radians(90.f), glm::vec3(1, 0, 0));
     draw_Object_rectangle->transformation->setScale()->scaling(glm::vec3(50.f, 10.f, 50.f));
     
-    /*
+    
     vector<DrawableObject*> entities_cube;
     for (int i = 0; i < 20; i++) {
-        DrawableObject* draw_Object1 = new DrawableObject(sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
+        DrawableObject* draw_Object1 = new DrawableObject(false,false, sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
         draw_Object1->transformation->setScale()->scaling(glm::vec3(0.1f));
-        draw_Object1->transformation->setTranslate()->translation(glm::vec3(-5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX, 0, -5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX));
+        draw_Object1->transformation->setTranslate()->translation(glm::vec3(-5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX, -4.9f, -5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX));
         entities_cube.push_back(draw_Object1);
     }
-    
+    /*
     vector<DrawableObject*> entities_monkey;
     for (int i = 0; i < 20; i++) {
         DrawableObject* draw_Object1 = new DrawableObject(suziSmooth, sizeof(suziSmooth) / sizeof(suziSmooth[0]), sm2_light, 0, 3, 6, 3);
@@ -264,16 +266,23 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, 1);
         draw_Skycube->transformation->setTranslate()->translation(glm::vec3(new_pos.x - old_pos.x, new_pos.y - old_pos.y, new_pos.z - old_pos.z));
         draw_Skycube->draw(true,window, sizeof(skycube) / sizeof(skycube[0]));
         glClear(GL_DEPTH_BUFFER_BIT);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, 2);
         draw_Object_rectangle->draw(false,window, sizeof(plain) / sizeof(plain[0]));
         
-        /*
-        for (DrawableObject* object : entities_cube) {
-            object->draw(window, sizeof(sphere) / sizeof(sphere[0]));
-        }
         
+        for (DrawableObject* object : entities_cube) {
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, 3);
+            object->draw(false,window, sizeof(sphere) / sizeof(sphere[0]));
+            
+        }
+        /*
         for (DrawableObject* object1 : entities_monkey) {
             object1->draw(window, sizeof(suziSmooth) / sizeof(suziSmooth[0]));
         }

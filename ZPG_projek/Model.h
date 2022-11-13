@@ -21,6 +21,6 @@ private:
 public:
 	Model();
 	Model(float* points_var, int size);
-	GLuint setVBOVAO(bool isSkybox, int index, int size, int count, int color_count);
+	GLuint setVBOVAO(bool isSkybox, bool isPlain,int index, int size, int count, int color_count);
 };
 

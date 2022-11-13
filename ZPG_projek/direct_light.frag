@@ -27,9 +27,14 @@ uniform float flashlight_Strength;
 //uniform vec3 objectColor;
 
 
+//texture
+uniform sampler2D texture_Sphere;
+
+
 vec3 calculateDirectionalLight(vec3 lightDir_var){
     vec3 ambient = ambientStrength * lightColor;
   	
+    //vec3 norm_tmp = texture(texture_Sphere, vec2(Norm));
     // diffuse 
     vec3 norm = normalize(Normal);
 
@@ -77,7 +82,7 @@ vec3 calculatePointLight(vec3 light_Pos){
     float distance = length(light_Pos - FragPos);
     float attenuation = 1.0 / (1.0f + 0.01f * distance + 0.5f * (distance * distance));     
         
-    return (ambient*attenuation + diffuse*attenuation + specular*attenuation)* vec3(1,1,0);
+    return (ambient*attenuation + diffuse*attenuation + specular*attenuation);//* vec3(1,1,0);
 }
 vec3 calculateSpotLight(vec3 lightPosition_var, vec3 lightDirection_var, float cutOff_var, float outerCut_var, float flashlight_strength){
      vec3 ambient = ambientStrength * lightColor;
@@ -107,7 +112,7 @@ vec3 calculateSpotLight(vec3 lightPosition_var, vec3 lightDirection_var, float c
     float epsilon = cutOff_var - outerCut_var;
     float intensity = clamp((theta - outerCut_var) / epsilon, 0.0, 1.0);
         
-    return (ambient*attenuation*intensity*flashlight_Strength + diffuse*attenuation*intensity*flashlight_Strength + specular*attenuation*intensity*flashlight_Strength)* vec3(1,1,0);
+    return (ambient*attenuation*intensity*flashlight_Strength + diffuse*attenuation*intensity*flashlight_Strength + specular*attenuation*intensity*flashlight_Strength);//* vec3(1,1,0);
 
 }
 void main()
@@ -115,7 +120,7 @@ void main()
     vec3 result = vec3(0,0,0);
     //amb
     if(direct_Light_Direct != vec3(0,0,0)){
-        result = calculateDirectionalLight(direct_Light_Direct) * vec3(1,1,0);//* ourColor;
+        result = calculateDirectionalLight(direct_Light_Direct);// * vec3(1,1,0);//* ourColor;
     }
     //vec3 result = vec3(0,0,0);
     for(int i=0;i<10;i++){
@@ -127,5 +132,6 @@ void main()
     }
     result+=calculateSpotLight(lightPosition_var, lightDirection_var, cutOff_var,outerCut_var,flashlight_Strength);
     //result*= vec3(1,1,0);
-    FragColor = vec4(result, 1.0);
+    FragColor = vec4(result, 1.0) * texture(texture_Sphere, vec2(Normal));
+    //FragColor = texture(texture_Sphere, vec2(FragPos));
 } 
