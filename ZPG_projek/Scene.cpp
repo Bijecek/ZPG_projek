@@ -177,12 +177,16 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     DrawableObject* draw_Skycube = new DrawableObject(false,true, false, skycube, sizeof(skycube) / sizeof(skycube[0]), sp_skycube, 0, 3, 3, 0);
     draw_Skycube->transformation->setTranslate()->translation(glm::vec3(0,0,1));
     draw_Skycube->transformation->setScale()->scaling(glm::vec3(0.2f,0.2f,0.2f));
+    draw_Skycube->setObjectId(this->increment_object_Id);
+    this->increment_object_Id += 1;
 
 
 
     DrawableObject* draw_Plain = new DrawableObject(false,false,true,plain, sizeof(plain) / sizeof(plain[0]), sp_plain, 0, 3, 8, 3);
     draw_Plain->transformation->setTranslate()->translation(glm::vec3(-3, -5, 0));
     draw_Plain->transformation->setScale()->scaling(glm::vec3(50.f, 10.f, 50.f));
+    draw_Plain->setObjectId(this->increment_object_Id);
+    this->increment_object_Id += 1;
     
     
     sp_Object_w_texture->setTexture("Textures/lava_texture_png.png");
@@ -192,6 +196,8 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
         draw_Object1->transformation->setScale()->scaling(glm::vec3(0.1f));
         draw_Object1->transformation->setTranslate()->translation(glm::vec3(-5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX, -4.9f, -5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX));
         entities_cube.push_back(draw_Object1);
+        draw_Object1->setObjectId(this->increment_object_Id);
+        this->increment_object_Id += 1;
     }
     sp_Object_w_texture->vbovao_previous = NULL;
     sp_Object_w_texture->setTexture("Textures/ice_texture_png.png");
@@ -201,6 +207,8 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
         draw_Object1->transformation->setScale()->scaling(glm::vec3(0.1f));
         draw_Object1->transformation->setTranslate()->translation(glm::vec3(-5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX, -4.9f, -5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX));
         entities_monkey.push_back(draw_Object1);
+        draw_Object1->setObjectId(this->increment_object_Id);
+        this->increment_object_Id += 1;
     }
     sp_Object_w_texture->vbovao_previous = NULL;
     /*
@@ -220,7 +228,8 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
         entities_bushes.push_back(draw_Object1);
     }
     */
-
+    glEnable(GL_STENCIL_TEST);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     while (!glfwWindowShouldClose(window)) {
@@ -240,7 +249,7 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
         glm::vec3 new_pos = camera->getPosition();
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
         draw_Skycube->transformation->setTranslate()->translation(glm::vec3(new_pos.x - old_pos.x, new_pos.y - old_pos.y, new_pos.z - old_pos.z));
         draw_Skycube->draw(true,window, sizeof(skycube) / sizeof(skycube[0]));
@@ -249,10 +258,10 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
         draw_Plain->draw(false,window, sizeof(plain) / sizeof(plain[0]));
         
         
-        for (DrawableObject* object : entities_cube) {
-            object->draw(false,window, sizeof(sphere) / sizeof(sphere[0]));
+        //for (DrawableObject* object : entities_cube) {
+        //    object->draw(false,window, sizeof(sphere) / sizeof(sphere[0]));
             
-        }
+        //}
         
         for (DrawableObject* object1 : entities_monkey) {
             object1->draw(false, window, sizeof(suziSmooth) / sizeof(suziSmooth[0]));
@@ -266,6 +275,27 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
             object3->draw(window, sizeof(bushes) / sizeof(bushes[0]));
         }
         */
+        
+        for (DrawableObject *obj_sphere : entities_cube) {
+            glStencilFunc(GL_ALWAYS, obj_sphere->getObjectId(), 0xFF);
+            obj_sphere->draw(false, window, sizeof(sphere) / sizeof(sphere[0]));
+        }
+
+        GLuint id = 0;
+        double x, y;
+        int width, height;
+        glfwGetCursorPos(window, &x, &y);
+        if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
+            glfwGetFramebufferSize(window, &width, &height);
+            int new_y = height - y - 10;
+            glReadPixels(x, new_y, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &id);
+            cout << "Clicked on id: ";
+            cout << id << endl;
+        }
+        else if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
+
+        }
+
         glfwPollEvents();
         glfwSwapBuffers(window);
     }

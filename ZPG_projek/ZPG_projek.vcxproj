@@ -173,6 +173,8 @@
     <ClInclude Include="Translate.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="light_w_texture.frag" />
     <None Include="light_w_texture.vert" />
     <None Include="lighting_first_task.frag" />

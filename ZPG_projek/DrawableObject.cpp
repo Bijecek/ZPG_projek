@@ -1,4 +1,12 @@
 #include "DrawableObject.h"
+int DrawableObject::getObjectId()
+{
+    return this->object_id;
+}
+void DrawableObject::setObjectId(int object_id)
+{
+    this->object_id = object_id;
+}
 DrawableObject::DrawableObject(bool moreObjects, bool isSkybox, bool isPlain, float* points, int size, ShaderProgram* sp_light, int index, int size_index, int count, int color_count) {
     Model *temp = new Model();
     if (sp_light->vbovao_previous == NULL) {

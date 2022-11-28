@@ -26,6 +26,7 @@ using namespace std;
 class Scene : public Scenes
 {
 public:
+	int increment_object_Id = 0;
 	static Camera* camera_movement;
 	Scene();
 	void drawScene(GLFWwindow* window, int width, int height);

@@ -193,6 +193,8 @@
     <None Include="skycube.frag">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Textures\grass.png">

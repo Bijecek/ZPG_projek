@@ -238,7 +238,7 @@ const char* ShaderProgram::getTexture()
 
 void ShaderProgram::update(Subject* sub) {
 	if (sub == camera) {
-		cout << "Notified in sp" << endl;
+		//cout << "Notified in sp" << endl;
 		setUniform_viewPos(this->camera->getPosition());
 		setUniform_viewMatrix(this->camera->getView());
 		setUniform_projectionMatrix(this->camera->getProjection());
