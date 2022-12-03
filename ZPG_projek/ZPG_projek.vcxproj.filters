@@ -195,6 +195,19 @@
     </None>
     <None Include="ClassDiagram.cd" />
     <None Include="ClassDiagram1.cd" />
+    <None Include="packages.config" />
+    <None Include="house.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="house.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="light_w_texture_w_uv.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="light_w_texture_w_uv.frag">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Textures\grass.png">
@@ -222,6 +235,9 @@
       <Filter>Resource Files\textures</Filter>
     </Image>
     <Image Include="Textures\posz.jpg">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Downloads\ukazkaAssimp\model.png">
       <Filter>Resource Files\textures</Filter>
     </Image>
   </ItemGroup>

@@ -3,8 +3,8 @@ out vec4 FragColor;
 
 in vec3 Normal;  
 in vec3 FragPos;  
-in vec3 ourColor;
-  
+/*in vec3 ourColor; */
+in vec2 uvc; 
 
 uniform float ambientStrength;
 uniform vec3 lightColor;
@@ -138,7 +138,7 @@ void main()
     vec3 result = vec3(0,0,0);
 
     for(int i=0;i<10;i++){
-        if(lights[i].type != 0 || lights[i].type != 1 || lights[i].type != 2){
+        if(lights[i].type == 0 || lights[i].type == 1 || lights[i].type == 2){ 
             if(lights[i].type == 0){
                 result+= calculatePointLight(lights[i].light_Pos);
             }
@@ -149,9 +149,9 @@ void main()
             else if(lights[i].type == 2){
                 result+=calculateSpotLight(lights[i].lightPosition_var, lights[i].lightDirection_var, lights[i].cutOff_var,lights[i].outerCut_var,lights[i].flashlight_Strength);   
             }
-        }
+        } 
     }
    
-    FragColor = vec4(result, 1.0) * texture(texture_Sphere, vec2(FragPos));
+    FragColor = vec4(result, 1.0) * texture(texture_Sphere, uvc);
     
 } 

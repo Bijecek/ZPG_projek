@@ -175,6 +175,8 @@
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
     <None Include="ClassDiagram1.cd" />
+    <None Include="house.frag" />
+    <None Include="house.vert" />
     <None Include="light_w_texture.frag" />
     <None Include="light_w_texture.vert" />
     <None Include="lighting_first_task.frag" />
@@ -185,6 +187,9 @@
     <None Include="lighting_second_task_wrong.vert" />
     <None Include="lighting_third_task_blue.frag" />
     <None Include="lighting_third_task_blue.vert" />
+    <None Include="light_w_texture_w_uv.frag" />
+    <None Include="light_w_texture_w_uv.vert" />
+    <None Include="packages.config" />
     <None Include="pyramid.frag" />
     <None Include="pyramid.vert" />
     <None Include="skycube.frag" />
@@ -195,6 +200,7 @@
     <None Include="plain.vert" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\Downloads\ukazkaAssimp\model.png" />
     <Image Include="Textures\grass.png" />
     <Image Include="Textures\ice_texture_png.png" />
     <Image Include="Textures\lava_texture_png.png" />
@@ -207,5 +213,16 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\AssimpNet.5.0.0-beta1\build\AssimpNet.targets" Condition="Exists('..\packages\AssimpNet.5.0.0-beta1\build\AssimpNet.targets')" />
+    <Import Project="..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets" Condition="Exists('..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets')" />
+    <Import Project="..\packages\Assimp.3.0.0\build\native\Assimp.targets" Condition="Exists('..\packages\Assimp.3.0.0\build\native\Assimp.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\AssimpNet.5.0.0-beta1\build\AssimpNet.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\AssimpNet.5.0.0-beta1\build\AssimpNet.targets'))" />
+    <Error Condition="!Exists('..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\Assimp.3.0.0\build\native\Assimp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Assimp.3.0.0\build\native\Assimp.targets'))" />
+  </Target>
 </Project>

@@ -43,9 +43,9 @@ void DrawableObject::draw(bool isSkybox, GLFWwindow *window,int size) {
     if (this->lighting_sp->point_light != NULL) {
         this->lighting_sp->setUniform_ambientStrength(this->lighting_sp->point_light->getAmbientStrength());
 
-        this->lighting_sp->setUniform_lightColor(this->lighting_sp->point_light->getLightColor());
+        //this->lighting_sp->setUniform_lightColor(this->lighting_sp->point_light->getLightColor());
     }
-
+    this->lighting_sp->setUniform_lightColor(glm::vec3(1,1,1));
     //zakomentovane
     //this->lighting_sp->setUniform_lightPos(this->lighting_sp->dif_light->getLightPosition());
     this->lighting_sp->setUniform_modelMatrix(this->transformation->getMatrix());
@@ -62,14 +62,17 @@ void DrawableObject::draw(bool isSkybox, GLFWwindow *window,int size) {
     this->lighting_sp->setUniform_projectionMatrix(this->lighting_sp->camera->getProjection());
     
     
-
     GLint uniformID = glGetUniformLocation(this->lighting_sp->shaderProgram, "textureUnitID");
     glUniform1i(uniformID, 0);
 
     GLint uniformID1 = glGetUniformLocation(this->lighting_sp->shaderProgram, "cubeID");
     glUniform1i(uniformID1, 0);
     GLint uniformID2 = glGetUniformLocation(this->lighting_sp->shaderProgram, "texture_Sphere");
-    glUniform1i(uniformID2, 0);
+    glUniform1i(uniformID2,0);
+    GLint uniformID3 = glGetUniformLocation(this->lighting_sp->shaderProgram, "houseID");
+    glUniform1i(uniformID3, 0);
+    
+    
 
     //this->lighting_sp->useAllPointLights();
 
@@ -77,7 +80,7 @@ void DrawableObject::draw(bool isSkybox, GLFWwindow *window,int size) {
         this->lighting_sp->useAvailableLights(0.3);
     }
     else if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
-        this->lighting_sp->useAvailableLights(0.0);
+       this->lighting_sp->useAvailableLights(0.0);
     }
     else {
         this->lighting_sp->useAvailableLights(-1.0);

@@ -85,18 +85,51 @@ GLuint Model::setVBOVAO(const char* texture_name, bool isSkybox,bool isPlain, in
     }
     else if (!isSkybox && !isPlain) {
         glActiveTexture(GL_TEXTURE0);
-        GLuint textureID2 = SOIL_load_OGL_texture(texture_name, SOIL_LOAD_RGBA, SOIL_CREATE_NEW_ID/*, SOIL_FLAG_TEXTURE_REPEATS*/, NULL);
+        GLuint textureID2 = SOIL_load_OGL_texture(texture_name, SOIL_LOAD_RGBA, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
         if (textureID2 == NULL) {
             std::cout << "An error occurred while loading image." << std::endl;
             exit(EXIT_FAILURE);
         }
+        if (texture_name == "Textures/rock_texture_3.jpg") {
+            //glGenerateMipmap(GL_TEXTURE_2D);
+            cout << "Texture rock" << endl;
+            cout << textureID2 << endl;
+            //toto odkomentovat
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
+
+            //    glGenerateMipmap(GL_TEXTURE_2D);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MINIMAP, GL_LINEAR);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        //    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+
+            
+            glBindTexture(GL_TEXTURE_2D, textureID2);
+            
+            cout << "HERE0" << endl;
+  
+
+
+            this->texture_id = textureID2;
+
+
+        }
+        else {
         //glGenerateMipmap(GL_TEXTURE_2D);
         cout << "Texture sphere" << endl;
         cout << textureID2 << endl;
-        
+       //toto odkomentovat
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+         
+         
         //    glGenerateMipmap(GL_TEXTURE_2D);
         //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
         //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
@@ -109,6 +142,7 @@ GLuint Model::setVBOVAO(const char* texture_name, bool isSkybox,bool isPlain, in
         glBindTexture(GL_TEXTURE_2D, textureID2);
 
         this->texture_id = textureID2;
+        }
     }
     return VAO;
 }

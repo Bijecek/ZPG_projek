@@ -9,6 +9,18 @@
 #include "Observer.h";
 #include "plain.h"
 #include "skycube.h"
+
+
+
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>// aiSceneoutputdata structure
+#include <assimp/postprocess.h>// Post processingflags
+
+
+#include <iomanip>   // std::setprecision, std::setw
+
+
+
 Scene::Scene() {
    
 };
@@ -133,7 +145,7 @@ void Scene::drawOneSphereLight(GLFWwindow* window, int width, int height)
 
     glfwTerminate();
     exit(EXIT_SUCCESS);
-
+    
 
 }
 void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height) 
@@ -167,10 +179,48 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
 
     sp_Object_w_texture->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(2, 0, 0), camera->getPosition());
     sp_Object_w_texture->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(5,0,0), camera->getPosition());
-    sp_Object_w_texture->addDirectionalLight(glm::vec3(2, 5, 0));
+    //sp_Object_w_texture->addDirectionalLight(glm::vec3(2, 5, 0));
     sp_Object_w_texture->createShaderProgram();
 
 
+    //------------------//
+    //ASSIMP
+    int count = 0;
+    Assimp::Importer importer;
+    unsigned int importOptions = //aiProcess_Triangulate
+         aiProcess_OptimizeMeshes
+        | aiProcess_JoinIdenticalVertices
+        | aiProcess_Triangulate
+        |  aiProcess_CalcTangentSpace;
+    const aiScene* scene = importer.ReadFile("rock.obj", importOptions);
+    vector<float> data;
+
+    if (scene) {
+        aiMesh* mesh = scene->mMeshes[0];
+        count = mesh->mNumFaces * 3;
+        for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
+            for (unsigned int j = 0; j < 3; j++)
+            {
+                data.push_back(mesh->mVertices[mesh->mFaces[i].mIndices[j]].x);
+                data.push_back(mesh->mVertices[mesh->mFaces[i].mIndices[j]].y);
+                data.push_back(mesh->mVertices[mesh->mFaces[i].mIndices[j]].z);
+                data.push_back(mesh->mNormals[mesh->mFaces[i].mIndices[j]].x);
+                data.push_back(mesh->mNormals[mesh->mFaces[i].mIndices[j]].y);
+                data.push_back(mesh->mNormals[mesh->mFaces[i].mIndices[j]].z);
+                data.push_back(mesh->mTextureCoords[0][mesh->mFaces[i].mIndices[j]].x);
+                data.push_back(mesh->mTextureCoords[0][mesh->mFaces[i].mIndices[j]].y);
+            }
+        }
+    }
+    ShaderProgram* sp_rock = new ShaderProgram(camera);
+    sp_rock->addShader("light_w_texture_w_uv.vert");
+    sp_rock->addShader("light_w_texture_w_uv.frag");
+    //sp_rock->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(2, 0, 0), camera->getPosition());
+    sp_rock->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(5, 0, 0), camera->getPosition());
+    //sp_rock->addDirectionalLight(glm::vec3(2, 5, 0));
+    sp_rock->createShaderProgram();
+   // sp_house->setTexture("Textures/grass.png");
+    //------------------//
     float i = 0;
     srand((unsigned)time(NULL));
     
@@ -211,6 +261,19 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
         this->increment_object_Id += 1;
     }
     sp_Object_w_texture->vbovao_previous = NULL;
+
+
+    sp_rock->setTexture("Textures/rock_texture_3.jpg");
+    //------------------//
+    //ASSIMP
+    DrawableObject* draw_Rock = new DrawableObject(false, false, false, &data[0], data.size(), sp_rock, 0, 3, 8, 3);
+    draw_Rock->transformation->setTranslate()->translation(glm::vec3(15, -4.9, 10));
+
+
+
+
+    //-------------------//
+
     /*
     vector<DrawableObject*> entities_trees;
     for (int i = 0; i < 20; i++) {
@@ -231,6 +294,7 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     glEnable(GL_STENCIL_TEST);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
+
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     while (!glfwWindowShouldClose(window)) {
         if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) {
@@ -250,6 +314,9 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+
+        
 
         draw_Skycube->transformation->setTranslate()->translation(glm::vec3(new_pos.x - old_pos.x, new_pos.y - old_pos.y, new_pos.z - old_pos.z));
         draw_Skycube->draw(true,window, sizeof(skycube) / sizeof(skycube[0]));
@@ -280,6 +347,10 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
             glStencilFunc(GL_ALWAYS, obj_sphere->getObjectId(), 0xFF);
             obj_sphere->draw(false, window, sizeof(sphere) / sizeof(sphere[0]));
         }
+
+
+        // ASSIMP
+        draw_Rock->draw(true, window, count);
 
         GLuint id = 0;
         double x, y;

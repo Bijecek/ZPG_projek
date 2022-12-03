@@ -2,6 +2,7 @@
 //#include "Basic_test_scene.h"
 #include "Scene.h"
 
+
 Application::Application()
 {
 	createWindow(1280, 720, "ZPG");
