@@ -22,7 +22,7 @@ private:
 public:
 	Model();
 	Model(float* points_var, int size);
-	GLuint setVBOVAO(const char* texture_name,bool isSkybox, bool isPlain,int index, int size, int count, int color_count);
+	GLuint setVBOVAO(const char* texture_name,bool isSkybox, bool hasUvCoords,int index, int size, int count, int color_count);
 	GLuint getTextureId();
 };
 

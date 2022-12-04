@@ -139,10 +139,10 @@ void main()
 
     for(int i=0;i<10;i++){
         if(lights[i].type == 0 || lights[i].type == 1 || lights[i].type == 2){ 
-            if(lights[i].type == 0){
+            if(lights[i].type == 1){
                 result+= calculatePointLight(lights[i].light_Pos);
             }
-            else if(lights[i].type == 1){
+            else if(lights[i].type == 0){
                 result +=  calculateDirectionalLight(lights[i].direct_Light_Direct);
             
             }

@@ -14,6 +14,7 @@ public:
 	Rotate* setRotate();
 	Translate* setTranslate();
 	glm::mat4 getMatrix();
+	glm::vec3 getPosition();
 
 };
 

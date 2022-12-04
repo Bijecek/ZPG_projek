@@ -76,10 +76,10 @@ void Scene::drawFourSpheresScene(GLFWwindow* window, int width, int height)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         
-        draw_Object1->draw(false,window, sizeof(sphere) / sizeof(sphere[0]));
-        draw_Object2->draw(false, window, sizeof(sphere) / sizeof(sphere[0]));
-        draw_Object3->draw(false, window, sizeof(sphere) / sizeof(sphere[0]));
-        draw_Object4->draw(false, window, sizeof(sphere) / sizeof(sphere[0]));
+        draw_Object1->draw(window, sizeof(sphere) / sizeof(sphere[0]));
+        draw_Object2->draw(window, sizeof(sphere) / sizeof(sphere[0]));
+        draw_Object3->draw(window, sizeof(sphere) / sizeof(sphere[0]));
+        draw_Object4->draw(window, sizeof(sphere) / sizeof(sphere[0]));
 
      
         glfwPollEvents();
@@ -137,7 +137,7 @@ void Scene::drawOneSphereLight(GLFWwindow* window, int width, int height)
 
         
 
-        draw_Object1->draw(false, window, sizeof(sphere) / sizeof(sphere[0]));
+        draw_Object1->draw(window, sizeof(sphere) / sizeof(sphere[0]));
         glfwPollEvents();
         glfwSwapBuffers(window);
     }
@@ -170,6 +170,7 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     
 
     sp_plain->createShaderProgram();
+    sp_plain->setTexture("Textures/grass.png");
     
 
     
@@ -177,8 +178,8 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     sp_Object_w_texture->addShader("light_w_texture.vert");
     sp_Object_w_texture->addShader("light_w_texture.frag");
 
-    sp_Object_w_texture->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(2, 0, 0), camera->getPosition());
-    sp_Object_w_texture->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(5,0,0), camera->getPosition());
+    sp_Object_w_texture->addPointLight(0.05, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(2, -4.9f, 0), camera->getPosition());
+    //sp_Object_w_texture->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(5,0,0), camera->getPosition());
     //sp_Object_w_texture->addDirectionalLight(glm::vec3(2, 5, 0));
     sp_Object_w_texture->createShaderProgram();
 
@@ -215,8 +216,8 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     ShaderProgram* sp_rock = new ShaderProgram(camera);
     sp_rock->addShader("light_w_texture_w_uv.vert");
     sp_rock->addShader("light_w_texture_w_uv.frag");
-    //sp_rock->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(2, 0, 0), camera->getPosition());
-    sp_rock->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(5, 0, 0), camera->getPosition());
+    sp_rock->addPointLight(0.05, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(15, -5, 7), camera->getPosition());
+    //sp_rock->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(5, 0, 0), camera->getPosition());
     //sp_rock->addDirectionalLight(glm::vec3(2, 5, 0));
     sp_rock->createShaderProgram();
    // sp_house->setTexture("Textures/grass.png");
@@ -232,7 +233,7 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
 
 
 
-    DrawableObject* draw_Plain = new DrawableObject(false,false,true,plain, sizeof(plain) / sizeof(plain[0]), sp_plain, 0, 3, 8, 3);
+    DrawableObject* draw_Plain = new DrawableObject(false,false,false,plain, sizeof(plain) / sizeof(plain[0]), sp_plain, 0, 3, 8, 3);
     draw_Plain->transformation->setTranslate()->translation(glm::vec3(-3, -5, 0));
     draw_Plain->transformation->setScale()->scaling(glm::vec3(50.f, 10.f, 50.f));
     draw_Plain->setObjectId(this->increment_object_Id);
@@ -253,9 +254,9 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     sp_Object_w_texture->setTexture("Textures/ice_texture_png.png");
     vector<DrawableObject*> entities_monkey;
     for (int i = 0; i < 20; i++) {
-        DrawableObject* draw_Object1 = new DrawableObject(true, false,false,suziSmooth, sizeof(suziSmooth) / sizeof(suziSmooth[0]), sp_Object_w_texture, 0, 3, 6, 3);
+        DrawableObject* draw_Object1 = new DrawableObject(true, false,false,tree, sizeof(tree) / sizeof(tree[0]), sp_Object_w_texture, 0, 3, 6, 3);
         draw_Object1->transformation->setScale()->scaling(glm::vec3(0.1f));
-        draw_Object1->transformation->setTranslate()->translation(glm::vec3(-5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX, -4.9f, -5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX));
+        draw_Object1->transformation->setTranslate()->translation(glm::vec3(-5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX, -5.0f, -5 + static_cast<float>(rand()) * static_cast<float>(5 + 5) / RAND_MAX));
         entities_monkey.push_back(draw_Object1);
         draw_Object1->setObjectId(this->increment_object_Id);
         this->increment_object_Id += 1;
@@ -266,10 +267,12 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     sp_rock->setTexture("Textures/rock_texture_3.jpg");
     //------------------//
     //ASSIMP
-    DrawableObject* draw_Rock = new DrawableObject(false, false, false, &data[0], data.size(), sp_rock, 0, 3, 8, 3);
+    DrawableObject* draw_Rock = new DrawableObject(false, false, true, &data[0], data.size(), sp_rock, 0, 3, 8, 3);
     draw_Rock->transformation->setTranslate()->translation(glm::vec3(15, -4.9, 10));
+    
 
-
+    DrawableObject* draw_second_Rock = new DrawableObject(true, false, true, &data[0], data.size(), sp_rock, 0, 3, 8, 3);
+    draw_second_Rock->transformation->setTranslate()->translation(glm::vec3(6, -4.9, 10));
 
 
     //-------------------//
@@ -294,7 +297,7 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     glEnable(GL_STENCIL_TEST);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-
+    float angle = 0.0;
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     while (!glfwWindowShouldClose(window)) {
         if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) {
@@ -319,10 +322,10 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
         
 
         draw_Skycube->transformation->setTranslate()->translation(glm::vec3(new_pos.x - old_pos.x, new_pos.y - old_pos.y, new_pos.z - old_pos.z));
-        draw_Skycube->draw(true,window, sizeof(skycube) / sizeof(skycube[0]));
+        draw_Skycube->draw(window, sizeof(skycube) / sizeof(skycube[0]));
         glClear(GL_DEPTH_BUFFER_BIT);
 
-        draw_Plain->draw(false,window, sizeof(plain) / sizeof(plain[0]));
+        draw_Plain->draw(window, (sizeof(plain) / sizeof(plain[0]))/8);
         
         
         //for (DrawableObject* object : entities_cube) {
@@ -331,7 +334,7 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
         //}
         
         for (DrawableObject* object1 : entities_monkey) {
-            object1->draw(false, window, sizeof(suziSmooth) / sizeof(suziSmooth[0]));
+            object1->draw(window, (sizeof(tree) / sizeof(tree[0]))/6);
         }
         /*
         for (DrawableObject* object2 : entities_trees) {
@@ -345,12 +348,37 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
         
         for (DrawableObject *obj_sphere : entities_cube) {
             glStencilFunc(GL_ALWAYS, obj_sphere->getObjectId(), 0xFF);
-            obj_sphere->draw(false, window, sizeof(sphere) / sizeof(sphere[0]));
+            obj_sphere->draw(window, sizeof(sphere) / sizeof(sphere[0])/6);
         }
 
 
         // ASSIMP
-        draw_Rock->draw(true, window, count);
+        
+        //draw_Rock->transformation->setTranslate()->translation(glm::vec3(- 15, 4.9, -10));
+        /*
+        float r = glm::distance(a, glm::vec3(6, -4.9, 10));
+        draw_second_Rock->transformation->setTranslate()->translation(glm::vec3(-a.x, -a.y, -a.z));
+        
+        new_pos.x = a.z * ((float)sin(glm::radians(0.3f))) + a.x * ((float)cos(glm::radians(0.3f)));
+        new_pos.y = a.y;
+        new_pos.z = a.z * ((float)cos(glm::radians(0.3f))) - a.x * ((float)sin(glm::radians(0.3f)));
+        draw_second_Rock->transformation->setTranslate()->translation(glm::vec3(new_pos.x, new_pos.y, new_pos.z));
+        //draw_second_Rock->transformation->setRotate()->rotation(0.05f, glm::vec3(0, 1, 0));
+
+        a = new_pos;
+        cout << a.x << a.y << a.z << endl;
+        cout << new_pos.x << new_pos.y << new_pos.z << endl;
+        */
+
+        //
+       // draw_Rock->transformation->setTranslate()->translation(glm::vec3(0.01, 0, 0));
+        draw_Rock->motionLineSegment(glm::vec3(15, -4.9, 10), glm::vec3(0, -4.9,0));
+        glm::mat4 temp = draw_Rock->transformation->getMatrix();
+        draw_second_Rock->rotateAroundParent(temp[3]);
+        draw_Rock->draw(window, count);
+        draw_second_Rock->draw(window, count);
+       
+        
 
         GLuint id = 0;
         double x, y;

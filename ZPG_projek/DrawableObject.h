@@ -28,12 +28,19 @@ private:
 	GLuint texture_id;
 public:
 	CompleteTransformation* transformation = new CompleteTransformation();
+	float angle = 0;
 
 public:
 	int getObjectId();
 	void setObjectId(int object_id);
-	DrawableObject(bool moreObjects, bool isSkybox, bool isPlain, float* points, int size, ShaderProgram* sp_light, int index, int size_index, int count, int color_count);
-	void draw(bool isSkybox, GLFWwindow* window, int size);
+	DrawableObject(bool moreObjects, bool isSkybox, bool hasUvCoords, float* points, int size, ShaderProgram* sp_light, int index, int size_index, int count, int color_count);
+	void draw(GLFWwindow* window, int size);
 	GLuint getTextureId();
+	void rotateAroundParent(glm::vec3 parent_coords);
+	void motionLineSegment(glm::vec3 from, glm::vec3 to);
+
+	//motion
+	float t = 0.001;
+	float delta = 0;
 };
 

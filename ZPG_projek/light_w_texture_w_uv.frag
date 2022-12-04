@@ -96,7 +96,7 @@ vec3 calculatePointLight(vec3 light_Pos){
     vec3 specular = specularStrength * spec * lightColor;  
 
     float distance = length(light_Pos - FragPos);
-    float attenuation = 1.0 / (1.0f + 0.01f * distance + 0.5f * (distance * distance));     
+    float attenuation = 1.0 / (1.0f + 0.01f * distance + 0.01f * (distance * distance));     
         
     return (ambient*attenuation + diffuse*attenuation + specular*attenuation);//* vec3(1,1,0);
 }
@@ -139,10 +139,10 @@ void main()
 
     for(int i=0;i<10;i++){
         if(lights[i].type == 0 || lights[i].type == 1 || lights[i].type == 2){ 
-            if(lights[i].type == 0){
+            if(lights[i].type == 1){
                 result+= calculatePointLight(lights[i].light_Pos);
             }
-            else if(lights[i].type == 1){
+            else if(lights[i].type == 0){
                 result +=  calculateDirectionalLight(lights[i].direct_Light_Direct);
             
             }

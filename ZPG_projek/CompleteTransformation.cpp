@@ -14,3 +14,6 @@ Rotate* CompleteTransformation::setRotate() {
 Translate* CompleteTransformation::setTranslate() {
     return this->translate;
 }
+glm::vec3 CompleteTransformation::getPosition() {
+    return this->translate->pos;
+}

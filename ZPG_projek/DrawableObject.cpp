@@ -7,12 +7,12 @@ void DrawableObject::setObjectId(int object_id)
 {
     this->object_id = object_id;
 }
-DrawableObject::DrawableObject(bool moreObjects, bool isSkybox, bool isPlain, float* points, int size, ShaderProgram* sp_light, int index, int size_index, int count, int color_count) {
+DrawableObject::DrawableObject(bool moreObjects, bool isSkybox, bool hasUvCoords, float* points, int size, ShaderProgram* sp_light, int index, int size_index, int count, int color_count) {
     Model *temp = new Model();
     if (sp_light->vbovao_previous == NULL) {
         temp = new Model(points, size);
         this->lighting_model = temp;
-        this->lighting_VAO = lighting_model->setVBOVAO(sp_light->getTexture(), isSkybox, isPlain, index, size_index, count, color_count);
+        this->lighting_VAO = lighting_model->setVBOVAO(sp_light->getTexture(), isSkybox, hasUvCoords, index, size_index, count, color_count);
         this->lighting_sp = sp_light;
         this->texture_id = lighting_model->getTextureId();
     }
@@ -31,7 +31,7 @@ DrawableObject::DrawableObject(bool moreObjects, bool isSkybox, bool isPlain, fl
 
 }
 
-void DrawableObject::draw(bool isSkybox, GLFWwindow *window,int size) {
+void DrawableObject::draw(GLFWwindow *window,int size) {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, this->getTextureId());
 
@@ -92,23 +92,54 @@ void DrawableObject::draw(bool isSkybox, GLFWwindow *window,int size) {
     glBindVertexArray(this->lighting_VAO);
 
     
-    if (isSkybox) {
-        glDrawArrays(GL_TRIANGLES, 0, size);
-    }
+    
+    glDrawArrays(GL_TRIANGLES, 0, size);
+    
+    /*
     else {
         if (size % 6 == 0) {
             //glDrawArrays(GL_TRIANGLES, 0, size);
-            glDrawArrays(GL_TRIANGLES, 0, size / 6);
+            glDrawArrays(GL_TRIANGLES, 0, size );
 
         }
         else if (size % 8 == 0) {
-            glDrawArrays(GL_QUADS, 0, size / 8);
+            //glDrawArrays(GL_QUADS, 0, size / 8);
         }
     }
+    */
    
 }
 
 GLuint DrawableObject::getTextureId()
 {
     return this->texture_id;
+}
+
+void DrawableObject::rotateAroundParent(glm::vec3 parent_coords)
+{
+    glm::vec3 new_position;
+    new_position = this->transformation->getPosition();
+    this->transformation->setTranslate()->translation(glm::vec3(-new_position.x, -new_position.y, -new_position.z));
+    new_position.x = parent_coords.x + cos(angle) * 5;
+    new_position.y = parent_coords.y;
+    new_position.z = parent_coords.z + sin(angle) * 5;
+    angle += 0.05;
+    if (angle >= 360) {
+        angle = 0;
+    }
+
+    this->transformation->setTranslate()->translation(glm::vec3(new_position.x, new_position.y, new_position.z));
+
+}
+
+void DrawableObject::motionLineSegment(glm::vec3 from, glm::vec3 to)
+{
+    glm::vec3 point = (to-from) * t;
+    this->transformation->setTranslate()->translation(point);
+    delta += t;
+    if (delta >= 1.0f || delta <= 0.0f) {
+        t *= -1;
+        glm::mat4 tmp = this->transformation->getMatrix();
+        cout << tmp[3].x <<" "<< tmp[3].y <<" "<< tmp[3].z << endl;
+    }
 }
