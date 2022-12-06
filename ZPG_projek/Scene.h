@@ -31,8 +31,10 @@ public:
 	Scene();
 	void drawScene(GLFWwindow* window, int width, int height);
 	void drawFourSpheresScene(GLFWwindow* window, int width, int height);
-	void drawOneSphereLight(GLFWwindow* window, int width, int height);
 	void drawMultipleObjects(GLFWwindow* window, int width, int height);
 	static void mouseCallbackWrapper(GLFWwindow* window, double xpos, double ypos);
+
+	vector<float> loadObjFile(string path);
+	void getStencilIdCoords(GLFWwindow* window, Camera* camera);
 };
 

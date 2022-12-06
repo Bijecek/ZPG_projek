@@ -35,7 +35,7 @@ public:
 	//try
 	GLuint vbovao_previous;
 	GLuint saveTextureId;
-	const char* texture_name;
+	const char* texture_name = "";
 public:
 	Camera* camera;
 	ShaderProgram();

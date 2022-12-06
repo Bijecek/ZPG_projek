@@ -29,8 +29,8 @@ private:
 	const float radius = 10.0f;
 	float floating_height = 1.0f;
 	bool firstMouse = true;
-	float lastX;
-	float lastY;
+	double lastX;
+	double lastY;
 	float sensitivity = 0.05f;
 	float yaw = 0.0f;
 	float pitch = 0.0f;
@@ -52,6 +52,10 @@ public:
 	void handleMouse(GLFWwindow* window, double xpos, double ypos);
 	void handleKeys(GLFWwindow* window);
 	glm::vec3 getPosition();
+
+	double* getXPos();
+	double* getYPos();
+
 
 	//vector<Observer*> obs;
 	//void update();

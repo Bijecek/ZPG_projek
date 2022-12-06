@@ -70,7 +70,7 @@ vec3 calculateDirectionalLight(vec3 lightDir_var){
     //}
     vec3 specular = specularStrength * spec * lightColor;  
     
-    return(ambient+diffuse+specular);
+    return(/*ambient+*/diffuse+specular);
         
 }
 
@@ -98,7 +98,7 @@ vec3 calculatePointLight(vec3 light_Pos){
     float distance = length(light_Pos - FragPos);
     float attenuation = 1.0 / (1.0f + 0.01f * distance + 0.5f * (distance * distance));     
         
-    return (ambient*attenuation + diffuse*attenuation + specular*attenuation);//* vec3(1,1,0);
+    return (/*ambient*attenuation + */diffuse*attenuation + specular*attenuation);//* vec3(1,1,0);
 }
 
 vec3 calculateSpotLight(vec3 lightPosition_var, vec3 lightDirection_var, float cutOff_var, float outerCut_var, float flashlight_Strength){

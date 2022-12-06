@@ -45,6 +45,9 @@ void DrawableObject::draw(GLFWwindow *window,int size) {
 
         //this->lighting_sp->setUniform_lightColor(this->lighting_sp->point_light->getLightColor());
     }
+    else {
+        this->lighting_sp->setUniform_ambientStrength(0.1);
+    }
     this->lighting_sp->setUniform_lightColor(glm::vec3(1,1,1));
     //zakomentovane
     //this->lighting_sp->setUniform_lightPos(this->lighting_sp->dif_light->getLightPosition());
@@ -77,7 +80,7 @@ void DrawableObject::draw(GLFWwindow *window,int size) {
     //this->lighting_sp->useAllPointLights();
 
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
-        this->lighting_sp->useAvailableLights(0.3);
+        this->lighting_sp->useAvailableLights(1.5);
     }
     else if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
        this->lighting_sp->useAvailableLights(0.0);
@@ -115,20 +118,64 @@ GLuint DrawableObject::getTextureId()
     return this->texture_id;
 }
 
-void DrawableObject::rotateAroundParent(glm::vec3 parent_coords)
+void DrawableObject::rotateAroundParentX(glm::vec3 parent_coords, float speed, float radius)
 {
+    
     glm::vec3 new_position;
-    new_position = this->transformation->getPosition();
+    new_position = this->transformation->getMatrix()[3];
     this->transformation->setTranslate()->translation(glm::vec3(-new_position.x, -new_position.y, -new_position.z));
-    new_position.x = parent_coords.x + cos(angle) * 5;
-    new_position.y = parent_coords.y;
-    new_position.z = parent_coords.z + sin(angle) * 5;
-    angle += 0.05;
+    new_position.x = parent_coords.x;
+    new_position.y = parent_coords.y + cos(glm::radians(angle)) * radius;
+    new_position.z = parent_coords.z + sin(glm::radians(angle)) * radius;
+    //this->transformation->setRotate()->rotation(glm::radians(angle), glm::vec3(1,0,0));
+
+    angle += speed;
     if (angle >= 360) {
         angle = 0;
     }
 
     this->transformation->setTranslate()->translation(glm::vec3(new_position.x, new_position.y, new_position.z));
+    
+
+}
+void DrawableObject::rotateAroundParentY(glm::vec3 parent_coords, float speed, float radius)
+{
+
+    glm::vec3 new_position;
+    new_position = this->transformation->getMatrix()[3];
+    this->transformation->setTranslate()->translation(glm::vec3(-new_position.x, -new_position.y, -new_position.z));
+    new_position.x = parent_coords.x + cos(glm::radians(angle)) * radius;
+    new_position.y = parent_coords.y;
+    new_position.z = parent_coords.z + sin(glm::radians(angle)) * radius;
+
+
+
+    angle += speed;
+    if (angle >= 360) {
+        angle = 0;
+    }
+
+    this->transformation->setTranslate()->translation(glm::vec3(new_position.x, new_position.y, new_position.z));
+
+
+}
+void DrawableObject::rotateAroundParentZ(glm::vec3 parent_coords, float speed, float radius)
+{
+
+    glm::vec3 new_position;
+    new_position = this->transformation->getMatrix()[3];
+    this->transformation->setTranslate()->translation(glm::vec3(-new_position.x, -new_position.y, -new_position.z));
+    new_position.x = parent_coords.x + cos(glm::radians(angle)) * radius;
+    new_position.y = parent_coords.y + sin(glm::radians(angle)) * radius;
+    new_position.z = parent_coords.z;
+
+    angle += speed;
+    if (angle >= 360) {
+        angle = 0;
+    }
+
+    this->transformation->setTranslate()->translation(glm::vec3(new_position.x, new_position.y, new_position.z));
+
 
 }
 

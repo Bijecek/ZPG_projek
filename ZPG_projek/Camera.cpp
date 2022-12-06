@@ -91,6 +91,7 @@ void Camera::handleMouse(GLFWwindow* window, double xpos, double ypos) {
     direction.y = sin(glm::radians(pitch));
     direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
     front = glm::normalize(direction);
+
     notify();
 }
 void Camera::handleKeys(GLFWwindow* window) {
@@ -116,6 +117,14 @@ void Camera::handleKeys(GLFWwindow* window) {
 
 glm::vec3 Camera::getPosition() {
     return this->position;
+}
+double* Camera::getXPos()
+{
+    return &(this->lastX);
+}
+double* Camera::getYPos()
+{
+    return &(this->lastY);
 }
 /*
 void Camera::update() {

@@ -60,10 +60,10 @@ void Application::run(int choice)
     if (choice == 1) {
         scene->drawFourSpheresScene(window, this->width, this->height);
     }
+    //else if (choice == 2) {
+    //    scene->drawOneSphereLight(window, this->width, this->height);
+    //}
     else if (choice == 2) {
-        scene->drawOneSphereLight(window, this->width, this->height);
-    }
-    else if (choice == 3) {
         scene->drawMultipleObjects(window, this->width, this->height);
     }
     else {

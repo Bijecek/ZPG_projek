@@ -28,6 +28,64 @@ Camera* Scene::camera_movement = nullptr;
 void Scene::mouseCallbackWrapper(GLFWwindow* window, double xpos, double ypos) {
     Scene::camera_movement->handleMouse(window, xpos, ypos);
 }
+vector<float> Scene::loadObjFile(string path)
+{
+    int count = 0;
+    Assimp::Importer importer;
+    unsigned int importOptions = //aiProcess_Triangulate
+        aiProcess_OptimizeMeshes
+        | aiProcess_JoinIdenticalVertices
+        | aiProcess_Triangulate
+        | aiProcess_CalcTangentSpace;
+    const aiScene* scene = importer.ReadFile(path, importOptions);
+    vector<float> data;
+
+    if (scene) {
+        aiMesh* mesh = scene->mMeshes[0];
+        count = mesh->mNumFaces * 3;
+        for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
+            for (unsigned int j = 0; j < 3; j++)
+            {
+                data.push_back(mesh->mVertices[mesh->mFaces[i].mIndices[j]].x);
+                data.push_back(mesh->mVertices[mesh->mFaces[i].mIndices[j]].y);
+                data.push_back(mesh->mVertices[mesh->mFaces[i].mIndices[j]].z);
+                data.push_back(mesh->mNormals[mesh->mFaces[i].mIndices[j]].x);
+                data.push_back(mesh->mNormals[mesh->mFaces[i].mIndices[j]].y);
+                data.push_back(mesh->mNormals[mesh->mFaces[i].mIndices[j]].z);
+                data.push_back(mesh->mTextureCoords[0][mesh->mFaces[i].mIndices[j]].x);
+                data.push_back(mesh->mTextureCoords[0][mesh->mFaces[i].mIndices[j]].y);
+            }
+        }
+    }
+    return data;
+}
+void Scene::getStencilIdCoords(GLFWwindow* window, Camera *camera)
+{
+    GLuint id = 0;
+    GLfloat depth = 0;
+    double x, y;
+    glfwGetCursorPos(window, &x, &y);
+
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+
+    int new_y = height - y - 10;
+    glReadPixels(x, new_y, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &id);
+    cout << "Clicked on id: ";
+    cout << id << endl;
+
+    glReadPixels(x, new_y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
+
+    glm::vec3 screenX = glm::vec3(x, new_y, depth);
+
+    glm::vec4 viewPort = glm::vec4(0, 0, width, height);
+    glm::vec3 pos = glm::unProject(screenX, camera->getView(), camera->getProjection(), viewPort);
+    cout << "-------" << endl;
+    cout << pos.x << endl;
+    cout << pos.y << endl;
+    cout << pos.z << endl;
+    cout << "-------" << endl;
+}
 void Scene::drawFourSpheresScene(GLFWwindow* window, int width, int height)
 {
     
@@ -50,10 +108,10 @@ void Scene::drawFourSpheresScene(GLFWwindow* window, int width, int height)
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     float i = 0;
-    DrawableObject* draw_Object1 = new DrawableObject(false,false,false,sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
-    DrawableObject* draw_Object2 = new DrawableObject(false, false, false, sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
-    DrawableObject* draw_Object3 = new DrawableObject(false, false, false, sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
-    DrawableObject* draw_Object4 = new DrawableObject(false, false, false, sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
+    DrawableObject* draw_Object1 = new DrawableObject(true,false,false,sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
+    DrawableObject* draw_Object2 = new DrawableObject(true, false, false, sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
+    DrawableObject* draw_Object3 = new DrawableObject(true, false, false, sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
+    DrawableObject* draw_Object4 = new DrawableObject(true, false, false, sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
     draw_Object1->transformation->setScale()->scaling(glm::vec3(0.1f));
     draw_Object1->transformation->setTranslate()->translation(glm::vec3(-0.3f, 0, 0));
 
@@ -92,62 +150,7 @@ void Scene::drawFourSpheresScene(GLFWwindow* window, int width, int height)
 
 
 }
-void Scene::drawOneSphereLight(GLFWwindow* window, int width, int height)
-{
-    Camera* camera = new Camera(glm::vec3(0, 0, 1), 45.0f, width / (float)height, 0.1f, 100.0f);
-    camera->setMovement(width, height);
-    Scene::camera_movement = camera;
-    
 
-    ShaderProgram* sm1_light = new ShaderProgram();
-//correct output of 2nd task
-    sm1_light->addShader("lighting_second_task_right.vert");
-    sm1_light->addShader("lighting_second_task_right.frag");
-
-//wrong output of 2nd task
-//    sm1_light->addShader("lighting_second_task_wrong.vert");
-//    sm1_light->addShader("lighting_second_task_wrong.frag");
-    //sm1_light->addAmbientLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f));
-    //sm1_light->addDiffuseLight(glm::vec3(0, 0, -1));
-    //sm1_light->addSpecularLight(camera->getPosition());
-    sm1_light->useCamera(camera);
-    sm1_light->createShaderProgram();
-
-
-
-    glfwSetCursorPosCallback(window, mouseCallbackWrapper);
-
-
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-    float i = 0;
-
-    DrawableObject* draw_Object1 = new DrawableObject(false, false, false, sphere, sizeof(sphere) / sizeof(sphere[0]), sm1_light, 0, 3, 6, 3);
-  
-    draw_Object1->transformation->setScale()->scaling(glm::vec3(0.1f));
-
-
-    while (!glfwWindowShouldClose(window)) {
-        i += 0;
-        camera->handleKeys(window);
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LESS);
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        
-
-        draw_Object1->draw(window, sizeof(sphere) / sizeof(sphere[0]));
-        glfwPollEvents();
-        glfwSwapBuffers(window);
-    }
-    glfwDestroyWindow(window);
-
-    glfwTerminate();
-    exit(EXIT_SUCCESS);
-    
-
-}
 void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height) 
 {
     Camera* camera = new Camera(glm::vec3(0, 0, 1), 45.0f, width / (float)height, 0.1f, 100.0f);
@@ -165,8 +168,10 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     ShaderProgram* sp_plain = new ShaderProgram(camera);
 
     
-    sp_plain->addShader("plain.vert");
-    sp_plain->addShader("plain.frag");
+    sp_plain->addShader("light_w_texture_w_uv.vert");
+    sp_plain->addShader("light_w_texture_w_uv.frag");
+    //sp_plain->addShader("light_w_texture.vert");
+    //sp_plain->addShader("light_w_texture.frag");
     
 
     sp_plain->createShaderProgram();
@@ -180,43 +185,19 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
 
     sp_Object_w_texture->addPointLight(0.05, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(2, -4.9f, 0), camera->getPosition());
     //sp_Object_w_texture->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(5,0,0), camera->getPosition());
-    //sp_Object_w_texture->addDirectionalLight(glm::vec3(2, 5, 0));
+    sp_Object_w_texture->addDirectionalLight(glm::vec3(2, 5, 0));
     sp_Object_w_texture->createShaderProgram();
 
 
     //------------------//
     //ASSIMP
-    int count = 0;
-    Assimp::Importer importer;
-    unsigned int importOptions = //aiProcess_Triangulate
-         aiProcess_OptimizeMeshes
-        | aiProcess_JoinIdenticalVertices
-        | aiProcess_Triangulate
-        |  aiProcess_CalcTangentSpace;
-    const aiScene* scene = importer.ReadFile("rock.obj", importOptions);
-    vector<float> data;
+    vector<float> data = loadObjFile("rock.obj");
+    //----------------//
 
-    if (scene) {
-        aiMesh* mesh = scene->mMeshes[0];
-        count = mesh->mNumFaces * 3;
-        for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
-            for (unsigned int j = 0; j < 3; j++)
-            {
-                data.push_back(mesh->mVertices[mesh->mFaces[i].mIndices[j]].x);
-                data.push_back(mesh->mVertices[mesh->mFaces[i].mIndices[j]].y);
-                data.push_back(mesh->mVertices[mesh->mFaces[i].mIndices[j]].z);
-                data.push_back(mesh->mNormals[mesh->mFaces[i].mIndices[j]].x);
-                data.push_back(mesh->mNormals[mesh->mFaces[i].mIndices[j]].y);
-                data.push_back(mesh->mNormals[mesh->mFaces[i].mIndices[j]].z);
-                data.push_back(mesh->mTextureCoords[0][mesh->mFaces[i].mIndices[j]].x);
-                data.push_back(mesh->mTextureCoords[0][mesh->mFaces[i].mIndices[j]].y);
-            }
-        }
-    }
     ShaderProgram* sp_rock = new ShaderProgram(camera);
     sp_rock->addShader("light_w_texture_w_uv.vert");
     sp_rock->addShader("light_w_texture_w_uv.frag");
-    sp_rock->addPointLight(0.05, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(15, -5, 7), camera->getPosition());
+    //sp_rock->addPointLight(0.05, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(15, -5, 7), camera->getPosition());
     //sp_rock->addPointLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(5, 0, 0), camera->getPosition());
     //sp_rock->addDirectionalLight(glm::vec3(2, 5, 0));
     sp_rock->createShaderProgram();
@@ -269,11 +250,18 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     //ASSIMP
     DrawableObject* draw_Rock = new DrawableObject(false, false, true, &data[0], data.size(), sp_rock, 0, 3, 8, 3);
     draw_Rock->transformation->setTranslate()->translation(glm::vec3(15, -4.9, 10));
-    
+    draw_Rock->setObjectId(this->increment_object_Id);
+    this->increment_object_Id += 1;
 
     DrawableObject* draw_second_Rock = new DrawableObject(true, false, true, &data[0], data.size(), sp_rock, 0, 3, 8, 3);
     draw_second_Rock->transformation->setTranslate()->translation(glm::vec3(6, -4.9, 10));
+    draw_second_Rock->setObjectId(this->increment_object_Id);
+    this->increment_object_Id += 1;
 
+    DrawableObject* draw_second_Rock_2 = new DrawableObject(true, false, true, &data[0], data.size(), sp_rock, 0, 3, 8, 3);
+    draw_second_Rock_2->transformation->setTranslate()->translation(glm::vec3(3, -4.9, 10));
+    draw_second_Rock_2->setObjectId(this->increment_object_Id);
+    this->increment_object_Id += 1;
 
     //-------------------//
 
@@ -297,15 +285,17 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
     glEnable(GL_STENCIL_TEST);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-    float angle = 0.0;
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     while (!glfwWindowShouldClose(window)) {
         if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) {
+            glfwGetCursorPos(window, camera->getXPos(), camera->getYPos());
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             glfwSetCursorPosCallback(window, mouseCallbackWrapper);
+
         }
         else if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) {
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            //camera->position = glm::vec3(2, 2, 2);
             glfwSetCursorPosCallback(window, NULL);
         }
 
@@ -322,10 +312,13 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
         
 
         draw_Skycube->transformation->setTranslate()->translation(glm::vec3(new_pos.x - old_pos.x, new_pos.y - old_pos.y, new_pos.z - old_pos.z));
+        glStencilFunc(GL_ALWAYS, draw_Skycube->getObjectId(), 0xFF);
         draw_Skycube->draw(window, sizeof(skycube) / sizeof(skycube[0]));
         glClear(GL_DEPTH_BUFFER_BIT);
 
+        glStencilFunc(GL_ALWAYS, draw_Plain->getObjectId(), 0xFF);
         draw_Plain->draw(window, (sizeof(plain) / sizeof(plain[0]))/8);
+
         
         
         //for (DrawableObject* object : entities_cube) {
@@ -334,6 +327,7 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
         //}
         
         for (DrawableObject* object1 : entities_monkey) {
+            glStencilFunc(GL_ALWAYS, object1->getObjectId(), 0xFF);
             object1->draw(window, (sizeof(tree) / sizeof(tree[0]))/6);
         }
         /*
@@ -352,44 +346,32 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
         }
 
 
-        // ASSIMP
-        
-        //draw_Rock->transformation->setTranslate()->translation(glm::vec3(- 15, 4.9, -10));
-        /*
-        float r = glm::distance(a, glm::vec3(6, -4.9, 10));
-        draw_second_Rock->transformation->setTranslate()->translation(glm::vec3(-a.x, -a.y, -a.z));
-        
-        new_pos.x = a.z * ((float)sin(glm::radians(0.3f))) + a.x * ((float)cos(glm::radians(0.3f)));
-        new_pos.y = a.y;
-        new_pos.z = a.z * ((float)cos(glm::radians(0.3f))) - a.x * ((float)sin(glm::radians(0.3f)));
-        draw_second_Rock->transformation->setTranslate()->translation(glm::vec3(new_pos.x, new_pos.y, new_pos.z));
-        //draw_second_Rock->transformation->setRotate()->rotation(0.05f, glm::vec3(0, 1, 0));
-
-        a = new_pos;
-        cout << a.x << a.y << a.z << endl;
-        cout << new_pos.x << new_pos.y << new_pos.z << endl;
-        */
-
-        //
-       // draw_Rock->transformation->setTranslate()->translation(glm::vec3(0.01, 0, 0));
         draw_Rock->motionLineSegment(glm::vec3(15, -4.9, 10), glm::vec3(0, -4.9,0));
+
         glm::mat4 temp = draw_Rock->transformation->getMatrix();
-        draw_second_Rock->rotateAroundParent(temp[3]);
-        draw_Rock->draw(window, count);
-        draw_second_Rock->draw(window, count);
+        draw_second_Rock->rotateAroundParentY(temp[3], 0.5, 5);
+
+        glm::mat4 temp2 = draw_second_Rock->transformation->getMatrix();
+        draw_second_Rock_2->rotateAroundParentX(temp2[3], 2, 2);
+
+        glStencilFunc(GL_ALWAYS, draw_Rock->getObjectId(), 0xFF);
+        draw_Rock->draw(window, data.size()/8);
+
+        glStencilFunc(GL_ALWAYS, draw_second_Rock->getObjectId(), 0xFF);
+        draw_second_Rock->draw(window, data.size()/8);
+
+        glStencilFunc(GL_ALWAYS, draw_second_Rock_2->getObjectId(), 0xFF);
+        draw_second_Rock_2->draw(window, data.size() / 8);
        
         
 
-        GLuint id = 0;
-        double x, y;
-        int width, height;
-        glfwGetCursorPos(window, &x, &y);
+        
+
+
+        
         if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
-            glfwGetFramebufferSize(window, &width, &height);
-            int new_y = height - y - 10;
-            glReadPixels(x, new_y, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &id);
-            cout << "Clicked on id: ";
-            cout << id << endl;
+            getStencilIdCoords(window,camera);
+            
         }
         else if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
 
