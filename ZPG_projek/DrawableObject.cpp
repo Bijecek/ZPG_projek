@@ -49,10 +49,17 @@ void DrawableObject::draw(GLFWwindow *window,int size) {
         this->lighting_sp->setUniform_ambientStrength(0.1);
     }
     this->lighting_sp->setUniform_lightColor(glm::vec3(1,1,1));
+    //not sure
+    //this->lighting_sp->setUniform_lightPos(glm::vec3(1, 2, 1));
     //zakomentovane
     //this->lighting_sp->setUniform_lightPos(this->lighting_sp->dif_light->getLightPosition());
     this->lighting_sp->setUniform_modelMatrix(this->transformation->getMatrix());
+
+    //glm::mat4 temp = this->transformation->getMatrix();
+
+    //glm::vec3 tmp2 = glm::vec3(this->transformation->getMatrix() * glm::vec4(1,0,1, 1.0));
     //odkomentovat
+    //glm::mat4 tmp_fin = glm::transpose(glm::inverse(temp));
     
     this->lighting_sp->setUniform_viewPos(this->lighting_sp->camera->getPosition());
 
@@ -80,7 +87,7 @@ void DrawableObject::draw(GLFWwindow *window,int size) {
     //this->lighting_sp->useAllPointLights();
 
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
-        this->lighting_sp->useAvailableLights(1.5);
+        this->lighting_sp->useAvailableLights(5.5);
     }
     else if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
        this->lighting_sp->useAvailableLights(0.0);

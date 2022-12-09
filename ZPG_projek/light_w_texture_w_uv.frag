@@ -76,15 +76,18 @@ vec3 calculateDirectionalLight(vec3 lightDir_var){
 
 vec3 calculatePointLight(vec3 light_Pos){
     vec3 ambient = ambientStrength * lightColor;
-  	
+  	//smerovy vektor ma velikost 1?
     // diffuse 
     vec3 norm = normalize(Normal);
+    //smer od Fragmentu do svetla
     vec3 lightDir = normalize(light_Pos - FragPos);
+    //cosinus uhlu mezi normalizovanymi vektory == intenzita
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = diff * lightColor;
     
     // specular
     float specularStrength = 0.5;
+    //smer od fragmentu do pozice kamery
     vec3 viewDir = normalize(viewPos - FragPos);
     vec3 reflectDir = reflect(-lightDir, norm);  
    

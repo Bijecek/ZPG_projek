@@ -9,9 +9,9 @@ Camera::Camera(glm::vec3 position, float fov, float aspect, float near, float fa
 
     this->position = position;
     this->front = glm::vec3(0.0f, 0.0f, -1.0f);
-	this->direction = glm::normalize(position - glm::vec3(0));
+	//this->direction = glm::normalize(position - glm::vec3(0));
     this->up = glm::vec3(0.0f, 1.0f, 0.0f);
-	this->camera_up = glm::cross(direction, glm::normalize(glm::cross(up, direction)));
+    this->camera_up = glm::vec3(0,1,0);
 }
 
 glm::mat4 Camera::getView()
@@ -81,11 +81,11 @@ void Camera::handleMouse(GLFWwindow* window, double xpos, double ypos) {
     yaw += xoffset;
     pitch += yoffset;
 
-    if (pitch > 89.0f)
-        pitch = 89.0f;
-    if (pitch < -89.0f)
-        pitch = -89.0f;
-
+    if (pitch > 189.0f)
+        pitch = 189.0f;
+    if (pitch < -189.0f)
+        pitch = -189.0f;
+    //sfericky souradny system
     glm::vec3 direction;
     direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     direction.y = sin(glm::radians(pitch));

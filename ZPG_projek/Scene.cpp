@@ -125,6 +125,8 @@ void Scene::drawFourSpheresScene(GLFWwindow* window, int width, int height)
     draw_Object4->transformation->setTranslate()->translation(glm::vec3(0, 0.3f, 0));
 
 
+
+
     while (!glfwWindowShouldClose(window)) {
         i += 0;
         camera->handleKeys(window);

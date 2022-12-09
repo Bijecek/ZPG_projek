@@ -115,8 +115,9 @@ void ShaderProgram::setUniform_lightColor(glm::vec3 lightColor)
 
 void ShaderProgram::setUniform_lightPos(glm::vec3 lightPos)
 {
-	//GLint p_matrix_light = glGetUniformLocation(this->shaderProgram, "lightPos");
-	//glUniform3fv(p_matrix_light, 1, glm::value_ptr(lightPos));
+	//not sure
+	GLint p_matrix_light = glGetUniformLocation(this->shaderProgram, "lightPos");
+	glUniform3fv(p_matrix_light, 1, glm::value_ptr(lightPos));
 
 }
 
