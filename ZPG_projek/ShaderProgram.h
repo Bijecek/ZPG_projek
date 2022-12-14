@@ -20,11 +20,12 @@ using namespace std;
 
 class ShaderProgram : public Observer
 {
-public:
-	vector<Shader*> shader_Array;
+
+private:
 	GLuint shaderProgram;
+	vector<Shader*> shader_Array;
 	vector<string> shader_code;
-	
+public:
 	PointLight* point_light;
 	DirectionalLight* directional_light;
 
@@ -48,7 +49,7 @@ public:
 	
 
 
-	void useShaderProgram(GLuint shader_program);
+	void useShaderProgram();
 	void setUniform_objectColor(glm::vec3 color);
 	void setUniform_ambientStrength(float ambientStrength);
 	void setUniform_lightColor(glm::vec3 lightColor);

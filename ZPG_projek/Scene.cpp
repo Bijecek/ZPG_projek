@@ -93,12 +93,12 @@ void Scene::drawFourSpheresScene(GLFWwindow* window, int width, int height)
     Camera* camera = new Camera(glm::vec3(0, 0, 1), 45.0f, width / (float)height, 0.1f, 100.0f);
     camera->setMovement(width, height);
     Scene::camera_movement = camera;
-    ShaderProgram* sm1_light = new ShaderProgram();
+    ShaderProgram* sm1_light = new ShaderProgram(camera);
     sm1_light->addShader("lighting_first_task.vert");
     sm1_light->addShader("lighting_first_task.frag");
     //sm1_light->addAmbientLight(0.1, glm::vec3(1.0f, 1.0f, 1.0f));
     //sm1_light->addDiffuseLight(glm::vec3(0, 0, 0));
-    sm1_light->useCamera(camera);
+    //sm1_light->useCamera(camera);
     //sm1_light->addSpecularLight(camera->getPosition());
     sm1_light->createShaderProgram();
 
@@ -289,6 +289,7 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     while (!glfwWindowShouldClose(window)) {
+        glfwPollEvents();
         if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) {
             glfwGetCursorPos(window, camera->getXPos(), camera->getYPos());
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -379,7 +380,7 @@ void Scene::drawMultipleObjects(GLFWwindow* window, int width, int height)
 
         }
 
-        glfwPollEvents();
+        //glfwPollEvents();
         glfwSwapBuffers(window);
     }
     glfwDestroyWindow(window);

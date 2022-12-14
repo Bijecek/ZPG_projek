@@ -26,6 +26,8 @@ private:
 	ShaderProgram *lighting_sp;
 	GLuint lighting_VAO;
 	GLuint texture_id;
+
+	bool is_first_Draw = true;
 public:
 	CompleteTransformation* transformation = new CompleteTransformation();
 	float angle = 0;

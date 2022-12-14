@@ -76,7 +76,6 @@ vec3 calculateDirectionalLight(vec3 lightDir_var){
 
 vec3 calculatePointLight(vec3 light_Pos){
     vec3 ambient = ambientStrength * lightColor;
-  	//smerovy vektor ma velikost 1?
     // diffuse 
     vec3 norm = normalize(Normal);
     //smer od Fragmentu do svetla

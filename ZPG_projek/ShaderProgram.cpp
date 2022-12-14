@@ -1,9 +1,7 @@
 #include "ShaderProgram.h"
 
 ShaderProgram::ShaderProgram() {
-	this->shader_Array = vector<Shader*>(0);
-	this->shader_code = {};
-	//camera->attachObs(this);
+
 };
 //pridano
 ShaderProgram::ShaderProgram(Camera *camera) {
@@ -89,9 +87,9 @@ void ShaderProgram::useCamera(Camera* camera)
 //	this->spe_light = new SpecularLight(viewPos);
 //}
 
-void ShaderProgram::useShaderProgram(GLuint shader_program)
+void ShaderProgram::useShaderProgram()
 {
-	glUseProgram(shader_program);
+	glUseProgram(this->shaderProgram);
 }
 
 void ShaderProgram::setUniform_objectColor(glm::vec3 color)
@@ -160,7 +158,7 @@ void ShaderProgram::addPointLight(float ambientStrength, glm::vec3 lightColor, g
 
 void ShaderProgram::useAvailableLights(float value)
 {
-	this->useShaderProgram(this->shaderProgram);
+	this->useShaderProgram();
 	int index = 0;
 	if (this->lightPositions.size() != 0) {
 		for (glm::vec3 position : lightPositions) {
@@ -239,9 +237,11 @@ const char* ShaderProgram::getTexture()
 
 void ShaderProgram::update(Subject* sub) {
 	if (sub == camera) {
-		//cout << "Notified in sp" << endl;
+		//cout << "Iam notified" << endl;
+		useShaderProgram();
+		//pri pohybu nastavuju novou pozici kamery ve frag. shaderu
 		setUniform_viewPos(this->camera->getPosition());
+		//pri pohybu nastavuju novou pohledovou matici
 		setUniform_viewMatrix(this->camera->getView());
-		setUniform_projectionMatrix(this->camera->getProjection());
 	}
 }

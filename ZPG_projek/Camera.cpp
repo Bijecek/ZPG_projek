@@ -33,6 +33,7 @@ void Camera::setMovement(int width, int height) {
     this->yaw = -90.0f;
 }
 void Camera::handleMouse(GLFWwindow* window, double xpos, double ypos) {
+    //notify();
     /*
             if (firstMouse)
             {
@@ -81,10 +82,10 @@ void Camera::handleMouse(GLFWwindow* window, double xpos, double ypos) {
     yaw += xoffset;
     pitch += yoffset;
 
-    if (pitch > 189.0f)
-        pitch = 189.0f;
-    if (pitch < -189.0f)
-        pitch = -189.0f;
+    if (pitch > 89.0f)
+        pitch = 89.0f;
+    if (pitch < -89.0f)
+        pitch = -89.0f;
     //sfericky souradny system
     glm::vec3 direction;
     direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
@@ -92,7 +93,10 @@ void Camera::handleMouse(GLFWwindow* window, double xpos, double ypos) {
     direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
     front = glm::normalize(direction);
 
+
+
     notify();
+   
 }
 void Camera::handleKeys(GLFWwindow* window) {
     const float cameraSpeed = 0.02f;
@@ -112,7 +116,6 @@ void Camera::handleKeys(GLFWwindow* window) {
         position += glm::normalize(glm::cross(front, camera_up)) * cameraSpeed;
         notify();
     }
-    //update();
 }
 
 glm::vec3 Camera::getPosition() {
@@ -126,15 +129,4 @@ double* Camera::getYPos()
 {
     return &(this->lastY);
 }
-/*
-void Camera::update() {
-    for (Observer *o : obs) {  
-        o->notify();
-    }
-    //this->obs[0]->notify();
-}
-void Camera::attachObs(Observer* obs) {
-    this->obs.push_back(obs);
-}
-*/
 

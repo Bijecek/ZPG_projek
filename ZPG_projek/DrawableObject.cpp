@@ -36,7 +36,7 @@ void DrawableObject::draw(GLFWwindow *window,int size) {
     glBindTexture(GL_TEXTURE_2D, this->getTextureId());
 
 
-    this->lighting_sp->useShaderProgram(this->lighting_sp->shaderProgram);
+    this->lighting_sp->useShaderProgram();
     
     this->lighting_sp->setUniform_objectColor(glm::vec3(1, 1, 1));
 
@@ -49,42 +49,18 @@ void DrawableObject::draw(GLFWwindow *window,int size) {
         this->lighting_sp->setUniform_ambientStrength(0.1);
     }
     this->lighting_sp->setUniform_lightColor(glm::vec3(1,1,1));
-    //not sure
-    //this->lighting_sp->setUniform_lightPos(glm::vec3(1, 2, 1));
-    //zakomentovane
-    //this->lighting_sp->setUniform_lightPos(this->lighting_sp->dif_light->getLightPosition());
+
+
     this->lighting_sp->setUniform_modelMatrix(this->transformation->getMatrix());
 
-    //glm::mat4 temp = this->transformation->getMatrix();
-
-    //glm::vec3 tmp2 = glm::vec3(this->transformation->getMatrix() * glm::vec4(1,0,1, 1.0));
-    //odkomentovat
-    //glm::mat4 tmp_fin = glm::transpose(glm::inverse(temp));
+    //jen pro pred-nacteni, jinak bychom po spusteni (pokud bychom se nepohli) nic nevideli
+    if (is_first_Draw) {
+        this->lighting_sp->setUniform_viewPos(this->lighting_sp->camera->getPosition());
+        this->lighting_sp->setUniform_viewMatrix(this->lighting_sp->camera->getView());
+        this->lighting_sp->setUniform_projectionMatrix(this->lighting_sp->camera->getProjection());
+        is_first_Draw = false;
+    }
     
-    this->lighting_sp->setUniform_viewPos(this->lighting_sp->camera->getPosition());
-
-
-
-    //odkomentovat
-    this->lighting_sp->setUniform_viewMatrix(this->lighting_sp->camera->getView());
-
-    //odkomentovat
-    this->lighting_sp->setUniform_projectionMatrix(this->lighting_sp->camera->getProjection());
-    
-    
-    GLint uniformID = glGetUniformLocation(this->lighting_sp->shaderProgram, "textureUnitID");
-    glUniform1i(uniformID, 0);
-
-    GLint uniformID1 = glGetUniformLocation(this->lighting_sp->shaderProgram, "cubeID");
-    glUniform1i(uniformID1, 0);
-    GLint uniformID2 = glGetUniformLocation(this->lighting_sp->shaderProgram, "texture_Sphere");
-    glUniform1i(uniformID2,0);
-    GLint uniformID3 = glGetUniformLocation(this->lighting_sp->shaderProgram, "houseID");
-    glUniform1i(uniformID3, 0);
-    
-    
-
-    //this->lighting_sp->useAllPointLights();
 
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
         this->lighting_sp->useAvailableLights(5.5);
@@ -104,19 +80,7 @@ void DrawableObject::draw(GLFWwindow *window,int size) {
     
     
     glDrawArrays(GL_TRIANGLES, 0, size);
-    
-    /*
-    else {
-        if (size % 6 == 0) {
-            //glDrawArrays(GL_TRIANGLES, 0, size);
-            glDrawArrays(GL_TRIANGLES, 0, size );
-
-        }
-        else if (size % 8 == 0) {
-            //glDrawArrays(GL_QUADS, 0, size / 8);
-        }
-    }
-    */
+  
    
 }
 
