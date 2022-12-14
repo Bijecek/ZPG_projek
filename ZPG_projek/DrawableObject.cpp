@@ -35,8 +35,6 @@ void DrawableObject::draw(GLFWwindow *window,int size) {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, this->getTextureId());
 
-
-    this->lighting_sp->useShaderProgram();
     
     this->lighting_sp->setUniform_objectColor(glm::vec3(1, 1, 1));
 

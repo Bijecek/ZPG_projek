@@ -94,18 +94,21 @@ void ShaderProgram::useShaderProgram()
 
 void ShaderProgram::setUniform_objectColor(glm::vec3 color)
 {
+	useShaderProgram();
 	GLint t_matrix_light = glGetUniformLocation(this->shaderProgram, "objectColor");
 	glUniform3fv(t_matrix_light, 1, glm::value_ptr(glm::vec3(1, 1, 1)));
 }
 
 void ShaderProgram::setUniform_ambientStrength(float ambientStrength)
 {
+	useShaderProgram();
 	GLint ambient_strength = glGetUniformLocation(this->shaderProgram, "ambientStrength");
 	glUniform1f(ambient_strength, ambientStrength);
 }
 
 void ShaderProgram::setUniform_lightColor(glm::vec3 lightColor)
 {
+	useShaderProgram();
 	GLint v_matrix_light = glGetUniformLocation(this->shaderProgram, "lightColor");
 	glUniform3fv(v_matrix_light, 1, glm::value_ptr(lightColor));
 
@@ -113,7 +116,7 @@ void ShaderProgram::setUniform_lightColor(glm::vec3 lightColor)
 
 void ShaderProgram::setUniform_lightPos(glm::vec3 lightPos)
 {
-	//not sure
+	useShaderProgram();
 	GLint p_matrix_light = glGetUniformLocation(this->shaderProgram, "lightPos");
 	glUniform3fv(p_matrix_light, 1, glm::value_ptr(lightPos));
 
@@ -121,6 +124,7 @@ void ShaderProgram::setUniform_lightPos(glm::vec3 lightPos)
 
 void ShaderProgram::setUniform_viewPos(glm::vec3 viewPos)
 {
+	useShaderProgram();
 	GLint cam_matrix_light = glGetUniformLocation(this->shaderProgram, "viewPos");
 	//konstantní pozice odlesku od kamery
 	//glUniform3fv(cam_matrix_light, 1, glm::value_ptr(this->lighting_sp->spe_light->getViewPosition()));
@@ -131,6 +135,7 @@ void ShaderProgram::setUniform_viewPos(glm::vec3 viewPos)
 
 void ShaderProgram::setUniform_modelMatrix(glm::mat4 modelMatrix)
 {
+	useShaderProgram();
 	GLint t_matrix_id_light = glGetUniformLocation(this->shaderProgram, "modelMatrix");
 	glUniformMatrix4fv(t_matrix_id_light, 1, GL_FALSE, &modelMatrix[0][0]);
 
@@ -138,6 +143,7 @@ void ShaderProgram::setUniform_modelMatrix(glm::mat4 modelMatrix)
 
 void ShaderProgram::setUniform_viewMatrix(glm::mat4 viewMatrix)
 {
+	useShaderProgram();
 	GLint v_matrix_id_light = glGetUniformLocation(this->shaderProgram, "viewMatrix");
 	glUniformMatrix4fv(v_matrix_id_light, 1, GL_FALSE, &viewMatrix[0][0]);
 
@@ -145,6 +151,7 @@ void ShaderProgram::setUniform_viewMatrix(glm::mat4 viewMatrix)
 
 void ShaderProgram::setUniform_projectionMatrix(glm::mat4 projectionMatrix)
 {
+	useShaderProgram();
 	GLint p_matrix_id_light = glGetUniformLocation(this->shaderProgram, "projectionMatrix");
 	glUniformMatrix4fv(p_matrix_id_light, 1, GL_FALSE, &projectionMatrix[0][0]);
 
@@ -238,7 +245,6 @@ const char* ShaderProgram::getTexture()
 void ShaderProgram::update(Subject* sub) {
 	if (sub == camera) {
 		//cout << "Iam notified" << endl;
-		useShaderProgram();
 		//pri pohybu nastavuju novou pozici kamery ve frag. shaderu
 		setUniform_viewPos(this->camera->getPosition());
 		//pri pohybu nastavuju novou pohledovou matici
